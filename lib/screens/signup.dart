@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
+import 'package:intl/intl.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,11 +13,14 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController();
+    TextEditingController birthdayController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    TextEditingController firstNameController = TextEditingController();
-    TextEditingController lastNameController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController userNameController = TextEditingController();
+    TextEditingController locationController = TextEditingController();
+    TextEditingController bioController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
+    DateTime? date;
     //bool validateFirst = firstNameController.text.isEmpty ? true : false;
     //bool validateFirst2 = false;
 
@@ -34,55 +38,102 @@ class _SignupPageState extends State<SignupPage> {
       return '';
     } */
 
-    final firstName = TextFormField(
+    final name = TextFormField(
       key: const Key('fName'),
-      controller: firstNameController,
+      controller: nameController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter first name';
+          return 'Enter name';
         }
         return null;
       },
       decoration: const InputDecoration(
-        hintText: "First Name",
+        hintText: "Name",
       ),
     );
 
-    final lastName = TextFormField(
-      key: const Key('lName'),
-      controller: lastNameController,
+    Future<void> _selectDate(BuildContext context) async {
+      final now = DateTime.now();
+      final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: date ?? now,
+          firstDate: DateTime(1951),
+          lastDate: DateTime(2023));
+      if (picked != null && picked != date) {
+        print('hello $picked');
+        date = picked;
+      }
+    }
+
+    Widget birthday(BuildContext context) {
+      return TextFormField(
+        validator: (value) {
+          if (value!.isEmpty || value == null) {
+            return 'Birthday is required.';
+          }
+          return null;
+        },
+        controller: birthdayController, //editing controller of this TextField
+        decoration: const InputDecoration(
+            icon: Icon(Icons.calendar_today), //icon of text field
+            labelText: "Birthday" //label text of field
+            ),
+        readOnly: true, //set it true, so that user will not able to edit text
+        onTap: () async {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          // Show Date Picker Here
+          await _selectDate(context);
+
+          setState(() {
+            print(date);
+            birthdayController.text = DateFormat('yyyy/MM/dd').format(date!);
+          });
+        },
+      );
+    }
+
+    final location = TextFormField(
+      key: const Key('locationField'),
+      controller: locationController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter last name';
+          return 'Enter location name';
         }
         return null;
       },
       decoration: const InputDecoration(
-        hintText: "Last Name",
+        hintText: "Location",
       ),
     );
 
-    final email = TextFormField(
-      key: const Key('sEmail'),
-      controller: emailController,
+    final bio = TextFormField(
+      key: const Key('bioField'),
+      controller: bioController,
+      validator: (value) {},
+      decoration: const InputDecoration(
+        hintText: "Bio",
+      ),
+    );
+
+    final userName = TextFormField(
+      key: const Key('userNameField'),
+      controller: userNameController,
       validator: (value) {
-        String pattern =
-            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-            r"{0,253}[a-zA-Z0-9])?)*$";
-        RegExp regex = RegExp(pattern);
-        if (value == null || value.isEmpty || !regex.hasMatch(value)) {
-          return 'Enter valid email address';
+        List<String> users = [];
+        if (value == null ||
+            value.isEmpty ||
+            users.contains(userNameController.text)) {
+          return 'Enter a unique username';
         }
         return null;
       },
       decoration: const InputDecoration(
-        hintText: "Email",
+        hintText: "Username",
       ),
     );
 
     final password = TextFormField(
-      key: const Key('sPass'),
+      key: const Key('passwordField'),
       controller: passwordController,
       validator: (value) {
         if (value == null || value.isEmpty || value.length < 6) {
@@ -103,10 +154,11 @@ class _SignupPageState extends State<SignupPage> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             context.read<AuthProvider>().signUp(
-                emailController.text,
-                passwordController.text,
-                firstNameController.text,
-                lastNameController.text);
+                nameController.text,
+                bioController.text,
+                locationController.text,
+                userNameController.text,
+                passwordController.text);
             if (FirebaseAuthAPI.alreadeyExist) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('The account already exists for that email.')));
@@ -153,9 +205,11 @@ class _SignupPageState extends State<SignupPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 25),
               ),
-              firstName,
-              lastName,
-              email,
+              name,
+              birthday(context),
+              bio,
+              location,
+              userName,
               password,
               signupButton,
               backButton
