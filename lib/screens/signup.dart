@@ -16,7 +16,7 @@ class _SignupPageState extends State<SignupPage> {
     TextEditingController birthdayController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController nameController = TextEditingController();
-    TextEditingController userNameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
     TextEditingController locationController = TextEditingController();
     TextEditingController bioController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
@@ -115,14 +115,14 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
-    final userName = TextFormField(
+    final email = TextFormField(
       key: const Key('userNameField'),
-      controller: userNameController,
+      controller: emailController,
       validator: (value) {
         List<String> users = [];
         if (value == null ||
             value.isEmpty ||
-            users.contains(userNameController.text)) {
+            users.contains(emailController.text)) {
           return 'Enter a unique username';
         }
         return null;
@@ -157,7 +157,7 @@ class _SignupPageState extends State<SignupPage> {
                 nameController.text,
                 bioController.text,
                 locationController.text,
-                userNameController.text,
+                emailController.text,
                 passwordController.text);
             if (FirebaseAuthAPI.alreadeyExist) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -206,10 +206,10 @@ class _SignupPageState extends State<SignupPage> {
                 style: TextStyle(fontSize: 25),
               ),
               name,
-              birthday(context),
+              //birthday(context),
               bio,
               location,
-              userName,
+              email,
               password,
               signupButton,
               backButton

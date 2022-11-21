@@ -24,17 +24,14 @@ class FirebaseAuthAPI {
     displayName: 'Charlie',
   )); */
 
-  void saveUserToFirestore(String? uid, String username, String name,
+  void saveUserToFirestore(String? uid, String email, String name,
       String location, String bio) async {
     try {
       await db.collection("users").doc(uid).set({
-        "username": username,
+        "username": email,
         "name": name,
         "location": location,
         "bio": bio,
-        "friends": [],
-        "sentFriendRequests": [],
-        "receivedFriendRequests": []
       });
     } on FirebaseException catch (e) {
       print(e.message);
@@ -65,17 +62,14 @@ class FirebaseAuthAPI {
     }
   }
 
-  void signUp(String name, String location, String bio, String username,
+  void signUp(String name, String location, String bio, String email,
       String password) async {
     UserCredential credential;
-    print("asd");
     try {
       credential = await auth.createUserWithEmailAndPassword(
-          email: username, password: password);
-      print(credential.user);
+          email: email, password: password);
       if (credential.user != null) {
-        saveUserToFirestore(
-            credential.user?.uid, username, name, location, bio);
+        saveUserToFirestore(credential.user?.uid, email, name, location, bio);
       }
     } on FirebaseAuthException catch (e) {
       //possible to return something more useful
