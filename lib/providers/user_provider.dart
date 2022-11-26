@@ -53,6 +53,10 @@ class UserListProvider with ChangeNotifier {
     _otherUser = user;
   }
 
+  void getUsers() {
+    firebaseService.getUsers();
+  }
+
   void fetchUsers() {
     _usersStream = firebaseService.getAllUsers();
     notifyListeners();

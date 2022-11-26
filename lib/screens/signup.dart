@@ -13,6 +13,7 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   DateTime date = DateTime.now();
   String bday = '';
+
   @override
   Widget build(BuildContext context) {
     TextEditingController passwordController = TextEditingController();
@@ -190,6 +191,7 @@ class _SignupPageState extends State<SignupPage> {
           if (_formKey.currentState!.validate()) {
             context.read<AuthProvider>().signUp(
                 nameController.text,
+                bday,
                 bioController.text,
                 locationController.text,
                 emailController.text,
@@ -226,6 +228,9 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    bday =
+        "${date.year.toString()}/${date.month.toString()}/${date.day.toString()}";
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -240,8 +245,8 @@ class _SignupPageState extends State<SignupPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 25),
               ),
-              name,
               birthday,
+              name,
               bio,
               location,
               email,

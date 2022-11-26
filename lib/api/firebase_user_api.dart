@@ -26,10 +26,9 @@ class FirebaseUserAPI {
     return db.collection("users").snapshots();
   }
 
-  getUsers() async {
+  void getUsers() async {
     await users.get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        //doc.data() as M
         User user = User.fromJson(doc.data() as Map<String, dynamic>);
         print(user.email);
       });

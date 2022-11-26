@@ -156,7 +156,7 @@ class _FriendsPageState extends State<FriendsPage> {
             itemBuilder: ((context, index) {
               User friend = friends[index];
               return ListTile(
-                title: Text(friend.displayName),
+                title: Text(friend.name),
                 /* leading: Checkbox(
                     value: todo.completed,
                     onChanged: (bool? value) {

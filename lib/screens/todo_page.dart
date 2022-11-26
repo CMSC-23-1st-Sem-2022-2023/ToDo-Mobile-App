@@ -10,13 +10,14 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
+import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoPage extends StatefulWidget {
   TodoPage({super.key});
   String? userEmail = AuthProvider.userObj!.email;
-  List<User> user = [];
+  static List<User> user = [];
 
   @override
   State<TodoPage> createState() => _TodoPageState();
@@ -27,6 +28,7 @@ class _TodoPageState extends State<TodoPage> {
   Widget build(BuildContext context) {
     // access the list of todos in the provider
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
+    context.read<UserListProvider>().getUsers;
 
     return Scaffold(
       drawer: Drawer(
