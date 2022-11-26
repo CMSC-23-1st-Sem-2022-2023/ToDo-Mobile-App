@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
-import 'package:week7_networking_discussion/screens/todo_page.dart';
+import 'package:week7_networking_discussion/screens/friends_page.dart';
+import 'package:week7_networking_discussion/models/user_model.dart';
 
 class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
+  static final users = FirebaseFirestore.instance.collection('users');
 
   //inal docRef = db.collection("users").doc('kuND0KXmc148REGSIL5G');
 
@@ -24,10 +26,26 @@ class FirebaseUserAPI {
     return db.collection("users").snapshots();
   }
 
+  getUsers() async {
+    await users.get().then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        //doc.data() as M
+        User user = User.fromJson(doc.data() as Map<String, dynamic>);
+        print(user.email);
+      });
+    });
+  }
+
+/* 
+  void tryy(){
+    final FirebaseUser cuser = await auth.currentUser();
+final userid = cuser.uid;
+  } */
+
   Future<int> getLength() async {
     var length = await db.collection('users').get().then((querySnapshot) {
-      /* FriendsPage.userLength = querySnapshot.size;
-      FriendsPage.isLoaded = true; */
+      FriendsPage.userLength = querySnapshot.size;
+      FriendsPage.isLoaded = true;
     });
     return length;
   }

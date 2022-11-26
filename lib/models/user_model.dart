@@ -2,16 +2,24 @@ import 'dart:convert';
 
 class User {
   final String id;
-  String userName;
-  String displayName;
+  String email;
+  String name;
+  String location;
+  String birthday;
+  String bio;
+  List<dynamic> todos;
   List<dynamic> friends;
   List<dynamic> receivedFriendRequests;
   List<dynamic> sentFriendRequests;
 
   User(
       {required this.id,
-      required this.userName,
-      required this.displayName,
+      required this.email,
+      required this.name,
+      required this.location,
+      required this.birthday,
+      required this.bio,
+      required this.todos,
       required this.friends,
       required this.receivedFriendRequests,
       required this.sentFriendRequests});
@@ -20,8 +28,12 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
-      userName: json['userName'],
-      displayName: json['displayName'],
+      email: json['email'],
+      name: json['name'],
+      location: json['location'],
+      birthday: json['birthday'],
+      bio: json['bio'],
+      todos: json['todos'],
       friends: json['friends'],
       receivedFriendRequests: json['receivedFriendRequests'],
       sentFriendRequests: json['sentFriendRequests'],
@@ -36,8 +48,12 @@ class User {
   Map<String, dynamic> toJson(User user) {
     return {
       'id': user.id,
-      'userName': user.userName,
-      'displayName': user.displayName,
+      'email': user.email,
+      'name': user.name,
+      'location': user.location,
+      'birthday': user.birthday,
+      'bio': user.bio,
+      'todos': user.todos,
       'friends': user.friends,
       'receivedFriendRequests': user.receivedFriendRequests,
       'sentFriendRequests': user.sentFriendRequests,

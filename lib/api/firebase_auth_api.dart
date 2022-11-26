@@ -27,11 +27,17 @@ class FirebaseAuthAPI {
   void saveUserToFirestore(String? uid, String email, String name,
       String location, String bio) async {
     try {
+      List<String> friends = [];
+      List<String> sentFriendRequests = [];
+      List<String> receivedFriendRequests = [];
       await db.collection("users").doc(uid).set({
         "username": email,
         "name": name,
         "location": location,
         "bio": bio,
+        "friends": friends,
+        "sentFriendRequests": sentFriendRequests,
+        "receivedFriendRequests": receivedFriendRequests
       });
     } on FirebaseException catch (e) {
       print(e.message);

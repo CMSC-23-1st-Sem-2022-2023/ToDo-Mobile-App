@@ -4,7 +4,7 @@ import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
 
 class AuthProvider with ChangeNotifier {
   late FirebaseAuthAPI authService;
-  User? userObj;
+  static User? userObj;
 
   AuthProvider() {
     authService = FirebaseAuthAPI();
@@ -32,8 +32,8 @@ class AuthProvider with ChangeNotifier {
     authService.signOut();
   }
 
-  void signUp(String name, String bio, String location, String email,
-      String password) {
+  void signUp(
+      String name, String bio, String location, String email, String password) {
     authService.signUp(name, bio, location, email, password);
   }
 }

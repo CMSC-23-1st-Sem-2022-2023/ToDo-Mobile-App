@@ -6,11 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
+import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
+import 'package:week7_networking_discussion/screens/friends_page.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
 import 'package:week7_networking_discussion/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:week7_networking_discussion/screens/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +27,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: ((context) => TodoListProvider())),
         ChangeNotifierProvider(create: ((context) => AuthProvider())),
+        ChangeNotifierProvider(create: ((context) => UserListProvider())),
       ],
       child: MyApp(),
     ),
@@ -39,7 +43,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SimpleTodo',
       initialRoute: '/',
-      routes: {'/': (context) => const AuthWrapper()},
+      routes: {
+        '/': (context) => const AuthWrapper(),
+        '/friends': (context) => const FriendsPage(),
+        '/profile': (context) => Profile(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -53,7 +61,7 @@ class AuthWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (context.watch<AuthProvider>().isAuthenticated) {
-      return const TodoPage();
+      return TodoPage();
     } else {
       return LoginPage();
     }

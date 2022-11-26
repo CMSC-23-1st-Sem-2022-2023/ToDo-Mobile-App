@@ -7,13 +7,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
+import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/auth_provider.dart';
 import 'package:week7_networking_discussion/screens/modal_todo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoPage extends StatefulWidget {
-  const TodoPage({super.key});
+  TodoPage({super.key});
+  String? userEmail = AuthProvider.userObj!.email;
+  List<User> user = [];
 
   @override
   State<TodoPage> createState() => _TodoPageState();
@@ -28,6 +31,20 @@ class _TodoPageState extends State<TodoPage> {
     return Scaffold(
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
+        ListTile(
+          title: const Text('Profile'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/profile');
+          },
+        ),
+        ListTile(
+          title: const Text('Friends'),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/friends');
+          },
+        ),
         ListTile(
           title: const Text('Logout'),
           onTap: () {

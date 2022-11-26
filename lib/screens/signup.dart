@@ -11,16 +11,17 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  DateTime date = DateTime.now();
+  String bday = '';
   @override
   Widget build(BuildContext context) {
-    TextEditingController birthdayController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     TextEditingController nameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController locationController = TextEditingController();
     TextEditingController bioController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
-    DateTime? date;
+
     //bool validateFirst = firstNameController.text.isEmpty ? true : false;
     //bool validateFirst2 = false;
 
@@ -52,7 +53,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
-    Future<void> _selectDate(BuildContext context) async {
+    /* Future<void> _selectDate(BuildContext context) async {
       final now = DateTime.now();
       final DateTime? picked = await showDatePicker(
           context: context,
@@ -63,9 +64,9 @@ class _SignupPageState extends State<SignupPage> {
         print('hello $picked');
         date = picked;
       }
-    }
-
-    Widget birthday(BuildContext context) {
+    } */
+/* 
+    Widget birthday1(BuildContext context) {
       return TextFormField(
         validator: (value) {
           if (value!.isEmpty || value == null) {
@@ -90,7 +91,34 @@ class _SignupPageState extends State<SignupPage> {
           });
         },
       );
-    }
+    } */
+
+    final birthday = Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () async {
+              DateTime? newDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100));
+
+              if (newDate == null) return;
+              bday =
+                  "${newDate.year.toString()}/${newDate.month.toString()}/${newDate.day.toString()}";
+              setState(() => date = newDate);
+            },
+          ),
+          Text(
+            '  Birthday: ${date.year}/${date.month}/${date.day}',
+            key: const Key('birthdayField'),
+          )
+        ],
+      ),
+    );
 
     final location = TextFormField(
       key: const Key('locationField'),
@@ -109,26 +137,33 @@ class _SignupPageState extends State<SignupPage> {
     final bio = TextFormField(
       key: const Key('bioField'),
       controller: bioController,
-      validator: (value) {},
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Enter bio';
+        }
+        return null;
+      },
       decoration: const InputDecoration(
         hintText: "Bio",
       ),
     );
 
     final email = TextFormField(
-      key: const Key('userNameField'),
+      key: const Key('sEmail'),
       controller: emailController,
       validator: (value) {
-        List<String> users = [];
-        if (value == null ||
-            value.isEmpty ||
-            users.contains(emailController.text)) {
-          return 'Enter a unique username';
+        String pattern =
+            r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+            r"{0,253}[a-zA-Z0-9])?)*$";
+        RegExp regex = RegExp(pattern);
+        if (value == null || value.isEmpty || !regex.hasMatch(value)) {
+          return 'Enter valid email address';
         }
         return null;
       },
       decoration: const InputDecoration(
-        hintText: "Username",
+        hintText: "Email",
       ),
     );
 
@@ -206,7 +241,7 @@ class _SignupPageState extends State<SignupPage> {
                 style: TextStyle(fontSize: 25),
               ),
               name,
-              //birthday(context),
+              birthday,
               bio,
               location,
               email,
