@@ -85,7 +85,8 @@ class _TodoPageState extends State<TodoPage> {
             return Center(
               child: Text("Error encountered! ${snapshot.error}"),
             );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
+          } else if (snapshot.connectionState == ConnectionState.waiting ||
+              TodoPage.user == Null) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -97,7 +98,7 @@ class _TodoPageState extends State<TodoPage> {
 
           print("TRY");
           for (int i = 0; i < TodoPage.users.length; i++) {
-            print(TodoPage.users[i].email);
+            //print(TodoPage.users[i].email);
             if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
               TodoPage.user = TodoPage.users[i];
               print(TodoPage.user!.name);
