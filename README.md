@@ -5,17 +5,20 @@ A mobile application allows a user to login and create a new account.
 ### Student Number: 202002805
 ### Section: C1L
 
+## MILESTONE 2
+
 ## Screenshots
-![Login](/images/loginPage.png)
+![Appdrawer](/images/milestone2.png)
+![Profile](/images/milestone2friends.png)
+![Friends](/images/milestone2profile.png)
 
 
 ## Things you did in the code
-Used the sample in the discussion as my base code then added the input fields for first name and last name and input validators.\
-To implement input validators, I used a form and converted the textfields as textformfields.\
+Added an app drawer to navigate to different screens(Todo screen, friends screen, and Profile)
 
 
 ## Challenges faced
-When it was just a text field, error text was not showing. Thus, I used a form and text form fields and just use the built in validate method.\
+The data from firebase is sometimes late to fetch, thus the user I used in profile screen is somketimes null
 
 ## Test Cases
 Happy paths: 
@@ -36,10 +39,5 @@ User did not input a first name, last name, valid email, or password when signin
 User did not input valid email and password in login page\
 ![LoginError](/images/loginErrorPage.png)
 
-
-MILESTONE 2
-![Appdrawer](/images/milestone2.png)
-![Profile](/images/milestone2friends.png)
-![Friends](/images/milestone2profile.png)
 
 ## References
