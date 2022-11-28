@@ -36,4 +36,10 @@ User did not input a first name, last name, valid email, or password when signin
 User did not input valid email and password in login page\
 ![LoginError](/images/loginErrorPage.png)
 
+
+MILESTONE 2
+![Appdrawer](/images/milestone2.png)
+![Profile](/images/milestone2friends.png)
+![Friends](/images/milestone2profile.png)
+
 ## References

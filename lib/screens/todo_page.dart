@@ -95,10 +95,7 @@ class _TodoPageState extends State<TodoPage> {
             );
           }
 
-          Future.delayed(Duration(milliseconds: 7000), () {
-            print("HI");
-          });
-
+          print("TRY");
           for (int i = 0; i < TodoPage.users.length; i++) {
             print(TodoPage.users[i].email);
             if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
