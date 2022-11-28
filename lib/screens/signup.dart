@@ -13,14 +13,14 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   DateTime date = DateTime.now();
   String bday = '';
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController nameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController locationController = TextEditingController();
-    TextEditingController bioController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
     //bool validateFirst = firstNameController.text.isEmpty ? true : false;

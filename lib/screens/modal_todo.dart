@@ -14,7 +14,9 @@ class TodoModal extends StatelessWidget {
   String type;
   // int todoIndex;
   TextEditingController _formFieldController = TextEditingController();
-  TextEditingController _deadlineController = TextEditingController();
+  DateTime date = DateTime.now();
+  String deadlineDate = '';
+  //TextEditingController _deadlineController = TextEditingController();
 
   TodoModal({
     super.key,
@@ -40,11 +42,52 @@ class TodoModal extends StatelessWidget {
     // Use context.read to get the last updated list of todos
     // List<Todo> todoItems = context.read<TodoListProvider>().todo;
 
+    final deadline = Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () async {
+              DateTime? newDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100));
+
+              if (newDate == null) return;
+              deadlineDate =
+                  "${newDate.year.toString()}/${newDate.month.toString()}/${newDate.day.toString()}";
+              //setState(() => date = newDate);
+            },
+          ),
+          Text(
+            '  Birthday: ${date.year}/${date.month}/${date.day}',
+            key: const Key('birthdayField'),
+          )
+        ],
+      ),
+    );
+
     switch (type) {
       case 'Delete':
         {
           return Text(
             "Are you sure you want to delete '${context.read<TodoListProvider>().selected.title}'?",
+          );
+        }
+      case 'Add':
+        {
+          return Column(
+            children: [
+              TextField(
+                controller: _formFieldController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  // hintText: todoIndex != -1 ? todoItems[todoIndex].title : '',
+                ),
+              ),
+            ],
           );
         }
       // Edit and add will have input field in them
@@ -70,7 +113,7 @@ class TodoModal extends StatelessWidget {
               // Instantiate a todo objeect to be inserted, default userID will be 1, the id will be the next id in the list
               Todo temp = Todo(
                   userId: TodoPage.user!.id,
-                  deadline: _deadlineController.text,
+                  deadline: deadlineDate,
                   notification: true,
                   completed: false,
                   title: _formFieldController.text);
