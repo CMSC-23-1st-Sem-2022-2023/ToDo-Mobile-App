@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -26,13 +27,31 @@ class FirebaseUserAPI {
     return db.collection("users").snapshots();
   }
 
-  void getUsers() async {
+  /*void getUsers() async {
     await users.get().then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         User user = User.fromJson(doc.data() as Map<String, dynamic>);
-        print(user.email);
+        print("hi");
       });
     });
+  }*/
+
+  Future<void> getUsers() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await users.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //print(allData);
+
+    
+
+    for (int i = 0; i < allData.length; i++) {
+      User newUser = User.fromJson(allData[i] as Map<String, dynamic>);
+      TodoPage.users.add(newUser);
+      print(newUser.email);
+    }
+    //print(TodoPage.users);
   }
 
 /* 

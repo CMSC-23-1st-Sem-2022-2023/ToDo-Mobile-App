@@ -16,8 +16,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoPage extends StatefulWidget {
   TodoPage({super.key});
-  String? userEmail = AuthProvider.userObj!.email;
-  static List<User> user = [];
+  //String? userEmail = AuthProvider.userObj!.email;
+  static List<User> users = [];
+  static User? user;
 
   @override
   State<TodoPage> createState() => _TodoPageState();
@@ -28,11 +29,19 @@ class _TodoPageState extends State<TodoPage> {
   Widget build(BuildContext context) {
     // access the list of todos in the provider
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
-    context.read<UserListProvider>().getUsers;
+    //context.read<UserListProvider>().getUsers;
+
+    UserListProvider().getUsers();
 
     return Scaffold(
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
+        ListTile(
+          title: const Text('Todos'),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
         ListTile(
           title: const Text('Profile'),
           onTap: () {
@@ -76,6 +85,14 @@ class _TodoPageState extends State<TodoPage> {
             return Center(
               child: Text("No Todos Found"),
             );
+          }
+          print("HI");
+          for (int i = 0; i < TodoPage.users.length; i++) {
+            print(TodoPage.users[i].email);
+            if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
+              TodoPage.user = TodoPage.users[i];
+              print(TodoPage.user!.name);
+            }
           }
 
           return ListView.builder(

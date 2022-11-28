@@ -1,6 +1,8 @@
+import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class Profile extends StatelessWidget {
   Profile({super.key});
@@ -21,19 +23,19 @@ class Profile extends StatelessWidget {
                 /*2*/
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Hello, this is Roxanne Ysabel P. Resuello!',
+                  child: Text(
+                    'Hello, this is ${TodoPage.user!.name}!',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Text(
+                /*Text(
                   'UPLB BSCS student',
                   style: TextStyle(
                     color: Colors.grey[500],
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
@@ -43,14 +45,13 @@ class Profile extends StatelessWidget {
     );
 
     // Text section
-    Widget textSection = const Padding(
+    Widget textSection = Padding(
       padding: EdgeInsets.all(25),
       child: Text(
-        'Name: Roxanne Ysabel Punzalan Resuello'
-        '\n\nBirthday: June 21 2002 '
-        '\n\nLocation: Balayan, Batangas '
-        '\n\nBio:  I am very close with my family. I am the 2nd-born and the only girl among the four children.'
-        ' As a family, we love travelling, eating, and watching movies.',
+        'Name: ${TodoPage.user!.name}'
+        '\n\nBirthday: ${TodoPage.user!.birthday} '
+        '\n\nLocation: ${TodoPage.user!.location}'
+        '\n\nBio: ${TodoPage.user!.bio}',
         softWrap: true,
       ),
     );
@@ -63,7 +64,7 @@ class Profile extends StatelessWidget {
           color: Color(0xFFFFC107),
           borderRadius: BorderRadius.circular(30),
         ),
-        child: Center(child: Text("Hi")),
+        child: Center(child: Text(TodoPage.user!.email)),
       ),
     );
 
@@ -87,7 +88,6 @@ class Profile extends StatelessWidget {
           idSection,
           titleSection,
           textSection,
-          const Text("        Hobbies:"),
         ],
       ),
     );

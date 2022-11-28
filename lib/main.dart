@@ -47,9 +47,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => const AuthWrapper(),
         '/friends': (context) => const FriendsPage(),
         '/profile': (context) => Profile(),
+        '/todos': (context) => TodoPage(),
       },
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.lightBlue,
       ),
     );
   }

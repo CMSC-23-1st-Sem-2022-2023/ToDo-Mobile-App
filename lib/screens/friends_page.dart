@@ -32,8 +32,11 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Friends")),
+    );
     // access the list of users in the provider
-
+    /*
     Stream<QuerySnapshot> usersStream =
         context.watch<UserListProvider>().users.asBroadcastStream();
     FriendsPage.usersStream = usersStream;
@@ -109,7 +112,8 @@ class _FriendsPageState extends State<FriendsPage> {
             return Center(
               child: Text("Error encountered! ${snapshot.error}"),
             );
-          } else if (!snapshot.hasData) {
+          } else if (!snapshot.hasData ||
+              snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -207,5 +211,6 @@ class _FriendsPageState extends State<FriendsPage> {
         child: const Icon(Icons.people),
       ),
     );
+    */
   }
 }
