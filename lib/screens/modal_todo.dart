@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class TodoModal extends StatelessWidget {
   String type;
   // int todoIndex;
   TextEditingController _formFieldController = TextEditingController();
+  TextEditingController _deadlineController = TextEditingController();
 
   TodoModal({
     super.key,
@@ -67,7 +69,9 @@ class TodoModal extends StatelessWidget {
             {
               // Instantiate a todo objeect to be inserted, default userID will be 1, the id will be the next id in the list
               Todo temp = Todo(
-                  userId: 1,
+                  userId: TodoPage.user!.id,
+                  deadline: _deadlineController.text,
+                  notification: true,
                   completed: false,
                   title: _formFieldController.text);
 

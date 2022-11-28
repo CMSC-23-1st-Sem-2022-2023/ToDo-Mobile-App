@@ -7,14 +7,18 @@
 import 'dart:convert';
 
 class Todo {
-  final int userId;
+  String userId;
   String? id;
   String title;
+  String deadline;
+  bool notification;
   bool completed;
 
   Todo({
     required this.userId,
     this.id,
+    required this.deadline,
+    required this.notification,
     required this.title,
     required this.completed,
   });
@@ -24,6 +28,8 @@ class Todo {
     return Todo(
       userId: json['userId'],
       id: json['id'],
+      deadline: json['deadline'],
+      notification: json['notification'],
       title: json['title'],
       completed: json['completed'],
     );
@@ -38,6 +44,8 @@ class Todo {
     return {
       'userId': todo.userId,
       'title': todo.title,
+      'deadline': todo.deadline,
+      'notification': todo.notification,
       'completed': todo.completed,
     };
   }

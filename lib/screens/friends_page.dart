@@ -11,6 +11,7 @@ import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/screens/modal_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class FriendsPage extends StatefulWidget {
   const FriendsPage({super.key});
@@ -18,7 +19,7 @@ class FriendsPage extends StatefulWidget {
   static List<User> users = [];
   static List<User> requests = [];
   static List<User> friends = [];
-  static int userLength = 0;
+  static int userLength = TodoPage.users.length;
   static bool isLoaded = false;
   static Stream<QuerySnapshot>? usersStream;
 
@@ -32,11 +33,12 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
+    /*
     return Scaffold(
       appBar: AppBar(title: Text("Friends")),
     );
     // access the list of users in the provider
-    /*
+    */
     Stream<QuerySnapshot> usersStream =
         context.watch<UserListProvider>().users.asBroadcastStream();
     FriendsPage.usersStream = usersStream;
@@ -51,6 +53,7 @@ class _FriendsPageState extends State<FriendsPage> {
 
     //print(users.length);
 
+    /*
     Future<int> getLength() async {
       final length = await UserListProvider().getLength();
       return length;
@@ -60,6 +63,7 @@ class _FriendsPageState extends State<FriendsPage> {
       FriendsPage.userLength = value;
       FriendsPage.isLoaded = true;
     });
+    */
 
     //sersStream.
 
@@ -117,7 +121,8 @@ class _FriendsPageState extends State<FriendsPage> {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snapshot.data?.docs.length == 1) {
+          } else if (snapshot.data?.docs.length == 1 ||
+              TodoPage.user!.friends.length == 0) {
             return Center(
               child: Text("No Friends Found"),
             );
@@ -211,6 +216,5 @@ class _FriendsPageState extends State<FriendsPage> {
         child: const Icon(Icons.people),
       ),
     );
-    */
   }
 }

@@ -18,6 +18,7 @@ class TodoPage extends StatefulWidget {
   TodoPage({super.key});
   //String? userEmail = AuthProvider.userObj!.email;
   static List<User> users = [];
+  static List<Todo> todos = [];
   static User? user;
 
   @override
@@ -33,6 +34,13 @@ class _TodoPageState extends State<TodoPage> {
 
     UserListProvider().getUsers();
 
+    /*while (TodoPage.users.length == 0) {
+      print("1");
+    }*/
+
+    //
+    // How to wait the upper code first before doing this??
+    //
     return Scaffold(
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: [
@@ -86,6 +94,7 @@ class _TodoPageState extends State<TodoPage> {
               child: Text("No Todos Found"),
             );
           }
+
           print("HI");
           for (int i = 0; i < TodoPage.users.length; i++) {
             print(TodoPage.users[i].email);
