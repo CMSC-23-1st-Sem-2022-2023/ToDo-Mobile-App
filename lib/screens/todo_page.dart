@@ -28,6 +28,7 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
+    TodoPage.users = [];
     // access the list of todos in the provider
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     //context.read<UserListProvider>().getUsers;
@@ -94,15 +95,6 @@ class _TodoPageState extends State<TodoPage> {
             return Center(
               child: Text("No Todos Found"),
             );
-          }
-
-          print("TRY");
-          for (int i = 0; i < TodoPage.users.length; i++) {
-            //print(TodoPage.users[i].email);
-            if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
-              TodoPage.user = TodoPage.users[i];
-              print(TodoPage.user!.name);
-            }
           }
 
           return ListView.builder(

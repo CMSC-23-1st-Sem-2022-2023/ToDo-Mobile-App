@@ -3,6 +3,7 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
+import 'package:week7_networking_discussion/providers/auth_provider.dart';
 
 class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -35,6 +36,20 @@ class FirebaseUserAPI {
       });
     });
   }*/
+/*
+  Future<void> setCurrentUser(String email) async {
+    QuerySnapshot querySnapshot =
+        await users.where('email', isEqualTo: email).get();
+
+    /*for (var snapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = snapshot.data() as M;
+    }*/
+    print("object");
+    TodoPage.user =
+        User.fromJson(querySnapshot.docs[0].data() as Map<String, dynamic>);
+    print(TodoPage.user!.name);
+  }
+  */
 
   Future<void> getUsers() async {
     // Get docs from collection reference
@@ -44,14 +59,39 @@ class FirebaseUserAPI {
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     //print(allData);
 
-    
-
     for (int i = 0; i < allData.length; i++) {
       User newUser = User.fromJson(allData[i] as Map<String, dynamic>);
       TodoPage.users.add(newUser);
       print(newUser.email);
     }
-    //print(TodoPage.users);
+
+    print(TodoPage.users.length);
+    for (int i = 0; i < TodoPage.users.length; i++) {
+      //print(TodoPage.users[i].email);
+      if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
+        TodoPage.user = TodoPage.users[i];
+        print("here");
+        print(TodoPage.user!.name);
+      }
+    }
+
+    // Get friends
+    for (int i = 0; i < TodoPage.users.length; i++) {
+      User checkUser = TodoPage.users[i];
+
+      if (TodoPage.user!.friends.contains(checkUser.id)) {
+        FriendsPage.friends.add(checkUser);
+      }
+    }
+
+    //Get friend request
+    for (int i = 0; i < FriendsPage.userLength; i++) {
+      User checkUser = TodoPage.users[i];
+      if (TodoPage.user!.receivedFriendRequests.contains(checkUser.id)) {
+        FriendsPage.requests.add(checkUser);
+      }
+    }
+    print('friends ${FriendsPage.friends.length}');
   }
 
 /* 

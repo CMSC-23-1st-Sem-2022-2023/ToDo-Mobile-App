@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
+import 'package:week7_networking_discussion/api/firebase_user_api.dart';
+import 'package:week7_networking_discussion/screens/friends_page.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class AuthProvider with ChangeNotifier {
   late FirebaseAuthAPI authService;
@@ -11,6 +14,7 @@ class AuthProvider with ChangeNotifier {
     authService.getUser().listen((User? newUser) {
       userObj = newUser;
       print('AuthProvider - FirebaseAuth - onAuthStateChanged - $newUser');
+      //FirebaseUserAPI().setCurrentUser(userObj!.email!);
       notifyListeners();
     }, onError: (e) {
       // provide a more useful error
@@ -29,6 +33,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   void signOut() {
+    TodoPage.users = [];
+    FriendsPage.friends = [];
+    FriendsPage.requests = [];
+    FriendsPage.userLength = 0;
     authService.signOut();
   }
 

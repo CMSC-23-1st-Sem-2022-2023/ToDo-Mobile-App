@@ -46,21 +46,23 @@ class UserModal extends StatelessWidget {
     switch (type) {
       case 'send':
         {
-          return Column(children: [
-            TextField(
-              controller: _formFieldController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                hintText: 'type username of the user you like to add',
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  sendRequest(_formFieldController.text, context);
-                },
-                child: Text("Add"))
-          ]);
+          return SizedBox(
+              height: 30,
+              child: Column(children: [
+                TextField(
+                  controller: _formFieldController,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'type username of the user you like to add',
+                  ),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      sendRequest(_formFieldController.text, context);
+                    },
+                    child: Text("Add"))
+              ]));
         }
       case 'Delete':
         {
@@ -68,7 +70,7 @@ class UserModal extends StatelessWidget {
             const Padding(
                 padding: EdgeInsets.all(30),
                 child: Text(
-                  "Are you sure you want to delete this friend'?",
+                  "Are you sure you want to delete this friend?",
                 )),
             ElevatedButton(
                 onPressed: () {
