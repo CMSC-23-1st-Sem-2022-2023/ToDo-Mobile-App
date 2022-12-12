@@ -10,22 +10,28 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
 
-class TodoModal extends StatelessWidget {
-  String type;
-  // int todoIndex;
-  TextEditingController _formFieldController = TextEditingController();
-  DateTime date = DateTime.now();
-  String deadlineDate = '';
-  //TextEditingController _deadlineController = TextEditingController();
+class TodoModal extends StatefulWidget {
+  String type = '';
 
   TodoModal({
     super.key,
     required this.type,
   });
+  @override
+  _TodoModalState createState() => _TodoModalState();
+}
+
+class _TodoModalState extends State<TodoModal> {
+  // int todoIndex;
+
+  TextEditingController _formFieldController = TextEditingController();
+  DateTime date = DateTime.now();
+  String deadlineDate = '';
+  TextEditingController _deadlineController = TextEditingController();
 
   // Method to show the title of the modal depending on the functionality
   Text _buildTitle() {
-    switch (type) {
+    switch (widget.type) {
       case 'Add':
         return const Text("Add new todo");
       case 'Edit':
@@ -58,18 +64,18 @@ class TodoModal extends StatelessWidget {
               if (newDate == null) return;
               deadlineDate =
                   "${newDate.year.toString()}/${newDate.month.toString()}/${newDate.day.toString()}";
-              //setState(() => date = newDate);
+              setState(() => date = newDate);
             },
           ),
           Text(
-            '  Birthday: ${date.year}/${date.month}/${date.day}',
-            key: const Key('birthdayField'),
+            '  Deadline: ${date.year}/${date.month}/${date.day}',
+            key: const Key('deadlineField'),
           )
         ],
       ),
     );
 
-    switch (type) {
+    switch (widget.type) {
       case 'Delete':
         {
           return Text(
@@ -80,6 +86,7 @@ class TodoModal extends StatelessWidget {
         {
           return Column(
             children: [
+              deadline,
               TextField(
                 controller: _formFieldController,
                 decoration: InputDecoration(
@@ -107,7 +114,7 @@ class TodoModal extends StatelessWidget {
 
     return TextButton(
       onPressed: () {
-        switch (type) {
+        switch (widget.type) {
           case 'Add':
             {
               // Instantiate a todo objeect to be inserted, default userID will be 1, the id will be the next id in the list
@@ -147,7 +154,7 @@ class TodoModal extends StatelessWidget {
       style: TextButton.styleFrom(
         textStyle: Theme.of(context).textTheme.labelLarge,
       ),
-      child: Text(type),
+      child: Text(widget.type),
     );
   }
 

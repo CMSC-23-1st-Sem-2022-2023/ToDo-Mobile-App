@@ -23,7 +23,7 @@ class FriendsPage extends StatefulWidget {
   static List<User> requests = [];
   static List<User> friends = [];
   static int userLength = TodoPage.users.length;
-  //static bool isLoaded = false;
+  static bool isLoaded = false;
   //static Stream<QuerySnapshot>? usersStream;
 
   /* final _FriendsPageState vpcs = _FriendsPageState();
@@ -79,7 +79,7 @@ class _FriendsPageState extends State<FriendsPage> {
       appBar: AppBar(
         title: Text("Friends"),
         actions: <Widget>[
-          IconButton(
+          /*IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
               showDialog(
@@ -92,7 +92,7 @@ class _FriendsPageState extends State<FriendsPage> {
                 ),
               );
             },
-          ),
+          ),*/
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
@@ -115,7 +115,6 @@ class _FriendsPageState extends State<FriendsPage> {
         itemBuilder: (context, index) {
           //FriendsPage.requests = [];
           //FriendsPage.friends = [];
-          print(TodoPage.user!.friends.length);
 
           /* if (snapshot.hasError) {
             return Center(

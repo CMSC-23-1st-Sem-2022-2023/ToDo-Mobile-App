@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class UserModal extends StatelessWidget {
   User user;
@@ -113,7 +114,7 @@ class UserModal extends StatelessWidget {
 
                         user.friends.add(other.id);
                         other.friends.add(user.id);
-
+                        FriendsPage.friends.add(other);
                         context.read<UserListProvider>().deleteRequest(
                             user.receivedFriendRequests,
                             otherUser.sentFriendRequests);
@@ -216,10 +217,11 @@ class UserModal extends StatelessWidget {
 
   void showSearch(String text, BuildContext context) {
     List<User> found = [];
-    for (int i = 0; i < user.friends.length; i++) {
-      /* if (FriendsPage.friends[i].userName.contains(text)) {
-        found.add(FriendsPage.friends[i]);
-      } */
+    for (int i = 0; i < TodoPage.users.length; i++) {
+      if (TodoPage.users[i].name.toLowerCase().contains(text.toLowerCase()) &&
+          TodoPage.users[i].id != TodoPage.user!.id) {
+        found.add(TodoPage.users[i]);
+      }
     }
 
     if (found.length == 0) {
@@ -255,6 +257,51 @@ class UserModal extends StatelessWidget {
                 otherUser = found[index];
                 return ListTile(
                   title: Text(otherUser.name),
+                  trailing: IconButton(
+                    //Decline request
+                    onPressed: () {
+                      User userToBeAdded = found[index];
+                      if (user.friends.contains(userToBeAdded.id)) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('This user is already your friend.')));
+
+                        return;
+                      } else if (user.sentFriendRequests
+                          .contains(userToBeAdded.id)) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'You already send a friend request to this user.')));
+
+                        return;
+                      } else if (user.receivedFriendRequests
+                          .contains(userToBeAdded.id)) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'This user is already in your friend request.')));
+                        return;
+                      } else {
+                        user.sentFriendRequests.add(userToBeAdded.id);
+                        userToBeAdded.receivedFriendRequests.add(user.id);
+                        FriendsPage.requests.add(userToBeAdded);
+                        otherUser = userToBeAdded;
+
+                        context.read<UserListProvider>().setUser(user);
+                        context
+                            .read<UserListProvider>()
+                            .changeOtherUser(userToBeAdded);
+
+                        context.read<UserListProvider>().sendRequest(
+                            user.sentFriendRequests,
+                            userToBeAdded.receivedFriendRequests);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Friend request sent')));
+                        return;
+                      }
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
                 );
               }),
             ));

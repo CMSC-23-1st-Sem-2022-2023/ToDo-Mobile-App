@@ -19,6 +19,10 @@ class TodoListProvider with ChangeNotifier {
     fetchTodos();
   }
 
+  void getTodos() {
+    firebaseService.getTodos();
+  }
+
   // getter
   Stream<QuerySnapshot> get todos => _todosStream;
   Todo get selected => _selectedTodo!;

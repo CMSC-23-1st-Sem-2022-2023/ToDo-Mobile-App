@@ -65,7 +65,7 @@ class FirebaseUserAPI {
       print(newUser.email);
     }
 
-    print(TodoPage.users.length);
+    //print(TodoPage.users.length);
     for (int i = 0; i < TodoPage.users.length; i++) {
       //print(TodoPage.users[i].email);
       if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
@@ -79,7 +79,8 @@ class FirebaseUserAPI {
     for (int i = 0; i < TodoPage.users.length; i++) {
       User checkUser = TodoPage.users[i];
 
-      if (TodoPage.user!.friends.contains(checkUser.id)) {
+      if (TodoPage.user!.friends.contains(checkUser.id) &&
+          !FriendsPage.friends.contains(checkUser)) {
         FriendsPage.friends.add(checkUser);
       }
     }
@@ -87,7 +88,8 @@ class FirebaseUserAPI {
     //Get friend request
     for (int i = 0; i < FriendsPage.userLength; i++) {
       User checkUser = TodoPage.users[i];
-      if (TodoPage.user!.receivedFriendRequests.contains(checkUser.id)) {
+      if (TodoPage.user!.receivedFriendRequests.contains(checkUser.id) &&
+          !FriendsPage.requests.contains(checkUser)) {
         FriendsPage.requests.add(checkUser);
       }
     }

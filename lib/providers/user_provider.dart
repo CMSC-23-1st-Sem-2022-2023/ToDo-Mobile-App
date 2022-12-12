@@ -16,6 +16,11 @@ import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserListProvider with ChangeNotifier {
+  late FirebaseUserAPI userAPI;
+  late Future<List<User>> _userList;
+
+  Future<List<User>> get user => _userList;
+
   late FirebaseUserAPI firebaseService;
   late Stream<QuerySnapshot> _usersStream;
   User? _selectedUser;

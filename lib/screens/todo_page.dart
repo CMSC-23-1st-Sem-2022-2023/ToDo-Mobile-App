@@ -28,12 +28,14 @@ class TodoPage extends StatefulWidget {
 class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
-    TodoPage.users = [];
+    //TodoPage.todos = [];
+    //TodoPage.users = [];
     // access the list of todos in the provider
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     //context.read<UserListProvider>().getUsers;
 
     UserListProvider().getUsers();
+    TodoListProvider().getTodos();
 
     /*while (TodoPage.users.length == 0) {
       print("1");
@@ -97,11 +99,13 @@ class _TodoPageState extends State<TodoPage> {
             );
           }
 
+          print("todo");
+
           return ListView.builder(
-            itemCount: snapshot.data?.docs.length,
+            itemCount: TodoPage.todos.length,
             itemBuilder: ((context, index) {
-              Todo todo = Todo.fromJson(
-                  snapshot.data?.docs[index].data() as Map<String, dynamic>);
+              print("in todo");
+              Todo todo = TodoPage.todos[index];
               return Dismissible(
                 key: Key(todo.id.toString()),
                 onDismissed: (direction) {
@@ -142,15 +146,17 @@ class _TodoPageState extends State<TodoPage> {
                       ),
                       IconButton(
                         onPressed: () {
-                          context
-                              .read<TodoListProvider>()
-                              .changeSelectedTodo(todo);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => TodoModal(
-                              type: 'Delete',
-                            ),
-                          );
+                          if (TodoPage.user!.todos.contains(todo.id)) {
+                            context
+                                .read<TodoListProvider>()
+                                .changeSelectedTodo(todo);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => TodoModal(
+                                type: 'Delete',
+                              ),
+                            );
+                          }
                         },
                         icon: const Icon(Icons.delete_outlined),
                       )

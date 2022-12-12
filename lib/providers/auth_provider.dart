@@ -33,6 +33,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   void signOut() {
+    TodoPage.todos = [];
     TodoPage.users = [];
     FriendsPage.friends = [];
     FriendsPage.requests = [];
