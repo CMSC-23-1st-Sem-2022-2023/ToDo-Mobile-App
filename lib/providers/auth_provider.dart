@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
 import 'package:week7_networking_discussion/api/firebase_user_api.dart';
+import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
 
@@ -33,8 +34,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   void signOut() {
+    TodoPage.isStart = false;
     TodoPage.todos = [];
     TodoPage.users = [];
+    TodoPage.user = null;
     FriendsPage.friends = [];
     FriendsPage.requests = [];
     FriendsPage.userLength = 0;

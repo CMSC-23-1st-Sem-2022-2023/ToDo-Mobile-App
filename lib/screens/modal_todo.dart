@@ -8,15 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
+import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class TodoModal extends StatefulWidget {
   String type = '';
+  Todo? todo;
 
-  TodoModal({
-    super.key,
-    required this.type,
-  });
+  TodoModal({super.key, required this.type, required this.todo});
   @override
   _TodoModalState createState() => _TodoModalState();
 }
@@ -26,14 +25,18 @@ class _TodoModalState extends State<TodoModal> {
 
   TextEditingController _formFieldController = TextEditingController();
   DateTime date = DateTime.now();
+  DateTime now = DateTime.now();
   String deadlineDate = '';
-  TextEditingController _deadlineController = TextEditingController();
+  bool isCompleted = false;
+  bool notification = false;
+  String edit = '';
+  TextEditingController _descriptionController = TextEditingController();
 
   // Method to show the title of the modal depending on the functionality
-  Text _buildTitle() {
+  Widget _buildTitle() {
     switch (widget.type) {
       case 'Add':
-        return const Text("Add new todo");
+        return const Center(child: Text("Add new todo"));
       case 'Edit':
         return const Text("Edit todo");
       case 'Delete':
@@ -47,6 +50,30 @@ class _TodoModalState extends State<TodoModal> {
   Widget _buildContent(BuildContext context) {
     // Use context.read to get the last updated list of todos
     // List<Todo> todoItems = context.read<TodoListProvider>().todo;
+
+    final status = Row(children: [
+      Text("Completed: "),
+      Checkbox(
+        value: isCompleted,
+        onChanged: (bool? value) {
+          setState(() {
+            isCompleted = value!;
+          });
+        },
+      )
+    ]);
+
+    final notif = Row(children: [
+      Text("Notification: "),
+      Checkbox(
+        value: notification,
+        onChanged: (bool? value) {
+          setState(() {
+            notification = value!;
+          });
+        },
+      )
+    ]);
 
     final deadline = Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -89,11 +116,29 @@ class _TodoModalState extends State<TodoModal> {
               deadline,
               TextField(
                 controller: _formFieldController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  // hintText: todoIndex != -1 ? todoItems[todoIndex].title : '',
-                ),
+                decoration: const InputDecoration(
+                    labelText: 'Title',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                    ),
+                    border: OutlineInputBorder()),
               ),
+              SizedBox(height: 10),
+              TextField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
+                    labelText: 'Description',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                    ),
+                    border: OutlineInputBorder()),
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [status, notif],
+              )
             ],
           );
         }
@@ -121,28 +166,35 @@ class _TodoModalState extends State<TodoModal> {
               Todo temp = Todo(
                   userId: TodoPage.user!.id,
                   deadline: deadlineDate,
-                  notification: true,
-                  completed: false,
+                  notification: notification,
+                  description: _descriptionController.text,
+                  edit:
+                      '${TodoPage.user!.name} - ${now.month.toString()}/${now.day.toString()} ${now.hour.toString()}:${now.minute.toString()}',
+                  completed: isCompleted,
                   title: _formFieldController.text);
 
+              TodoPage.todos.add(temp);
               context.read<TodoListProvider>().addTodo(temp);
+              //context.read<UserListProvider>().addTodo(TodoPage.user!.todos);
 
               // Remove dialog after adding
               Navigator.of(context).pop();
               break;
             }
-          // case 'Edit':
-          //   {
-          //     context
-          //         .read<TodoListProvider>()
-          //         .editTodo(todoIndex, _formFieldController.text);
+          case 'Edit':
+            {
+              //context
+              //  .read<TodoListProvider>()
+              //.editTodo(todoIndex, _formFieldController.text);
 
-          //     // Remove dialog after editing
-          //     Navigator.of(context).pop();
-          //     break;
-          //   }
+              // Remove dialog after editing
+              Navigator.of(context).pop();
+              break;
+            }
           case 'Delete':
             {
+              TodoPage.todos.remove(widget.todo);
+              TodoPage.user!.todos.remove(widget.todo!.id);
               context.read<TodoListProvider>().deleteTodo();
 
               // Remove dialog after editing

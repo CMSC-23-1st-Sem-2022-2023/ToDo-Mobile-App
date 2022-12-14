@@ -232,7 +232,7 @@ class _SignupPageState extends State<SignupPage> {
         "${date.year.toString()}/${date.month.toString()}/${date.day.toString()}";
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
         child: Center(

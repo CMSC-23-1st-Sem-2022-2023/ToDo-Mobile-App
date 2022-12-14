@@ -11,6 +11,8 @@ class Todo {
   String? id;
   String title;
   String deadline;
+  String description;
+  String edit;
   bool notification;
   bool completed;
 
@@ -18,6 +20,8 @@ class Todo {
     required this.userId,
     this.id,
     required this.deadline,
+    required this.description,
+    required this.edit,
     required this.notification,
     required this.title,
     required this.completed,
@@ -29,6 +33,8 @@ class Todo {
       userId: json['userId'],
       id: json['id'],
       deadline: json['deadline'],
+      description: json['description'],
+      edit: json['edit'],
       notification: json['notification'],
       title: json['title'],
       completed: json['completed'],
@@ -45,6 +51,8 @@ class Todo {
       'userId': todo.userId,
       'title': todo.title,
       'deadline': todo.deadline,
+      'description': todo.description,
+      'edit': todo.edit,
       'notification': todo.notification,
       'completed': todo.completed,
     };

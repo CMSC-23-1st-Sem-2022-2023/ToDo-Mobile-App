@@ -52,6 +52,7 @@ class FirebaseUserAPI {
   */
 
   Future<void> getUsers() async {
+    TodoPage.isStart = true;
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await users.get();
 
@@ -74,6 +75,12 @@ class FirebaseUserAPI {
         print(TodoPage.user!.name);
       }
     }
+
+    /* if (!TodoPage.users.contains(TodoPage.user)) {
+      print("AYOS");
+    } else {
+      print("WEH");
+    } */
 
     // Get friends
     for (int i = 0; i < TodoPage.users.length; i++) {
@@ -114,6 +121,28 @@ final userid = cuser.uid;
     try {
       final docRef = db.collection('users').doc(id);
       await docRef.update({'friends': friends});
+
+      return "Successfully deleted a friend!";
+    } on FirebaseException catch (e) {
+      return "Failed with error '${e.code}: ${e.message}";
+    }
+  }
+
+  Future<String> addTodo(String? id, List<dynamic> todos) async {
+    try {
+      final docRef = db.collection('users').doc(id);
+      await docRef.update({'todos': todos});
+
+      return "Successfully accepted a friend!";
+    } on FirebaseException catch (e) {
+      return "Failed with error '${e.code}: ${e.message}";
+    }
+  }
+
+  Future<String> deleteTodo(String? id, List<dynamic> todos) async {
+    try {
+      final docRef = db.collection('users').doc(id);
+      await docRef.update({'todos': todos});
 
       return "Successfully deleted a friend!";
     } on FirebaseException catch (e) {

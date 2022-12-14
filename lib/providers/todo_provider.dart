@@ -37,7 +37,7 @@ class TodoListProvider with ChangeNotifier {
   }
 
   void addTodo(Todo item) async {
-    String message = await firebaseService.addTodo(item.toJson(item));
+    String message = await firebaseService.addTodo(item.toJson(item), item);
     print(message);
     notifyListeners();
   }
@@ -56,6 +56,7 @@ class TodoListProvider with ChangeNotifier {
 
   void toggleStatus(int index, bool status) {
     // _todoList[index].completed = status;
+    _selectedTodo!.completed = status;
     print("Toggle Status");
     notifyListeners();
   }

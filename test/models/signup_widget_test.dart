@@ -3,33 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:week7_networking_discussion/main.dart' as app;
 
 void main() {
-  // Test for computing an area
-  test('Test for getting the area of a rectangle', () {
-    double length = 3.00;
-    double width = 4.00;
-
-    // area = length * width
-    double area = length * width;
-    expect(area, 12.00);
-  });
-
-  testWidgets('Screen has a title and body', (tester) async {
-    // Create the widget by telling the tester to build it.
-    await tester.pumpWidget(const MaterialApp(
-        title: 'TEST',
-        home: Scaffold(
-          body: Text("HI"),
-        )));
-
-    // Create the Finders.
-    final titleFinder = find.text('TEST');
-    final bodyFinder = find.text('HI');
-
-    // verify that the Text widgets appear exactly once in the widget tree.
-    expect(titleFinder, findsOneWidget);
-    expect(bodyFinder, findsOneWidget);
-  });
-
   // Define a test
   testWidgets('Test Signup Widget', (tester) async {
     // Create the widget by telling the tester to build it along with the provider the widget requires

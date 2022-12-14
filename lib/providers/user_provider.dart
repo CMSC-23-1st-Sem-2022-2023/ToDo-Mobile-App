@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:week7_networking_discussion/api/firebase_user_api.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:week7_networking_discussion/screens/todo_page.dart';
 
 class UserListProvider with ChangeNotifier {
   late FirebaseUserAPI userAPI;
@@ -87,6 +88,18 @@ class UserListProvider with ChangeNotifier {
     String message =
         await firebaseService.acceptRequest(_selectedUser!.id, friends);
     message = await firebaseService.acceptRequest(_otherUser!.id, otherfriends);
+    print(message);
+    notifyListeners();
+  }
+
+  void addTodo(List<dynamic> todos) async {
+    String message = await firebaseService.addTodo(TodoPage.user!.id, todos);
+    print(message);
+    notifyListeners();
+  }
+
+  void deleteTodo(List<dynamic> todos) async {
+    String message = await firebaseService.deleteTodo(TodoPage.user!.id, todos);
     print(message);
     notifyListeners();
   }

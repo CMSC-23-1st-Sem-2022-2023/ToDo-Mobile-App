@@ -50,7 +50,10 @@ class MyApp extends StatelessWidget {
         '/todos': (context) => TodoPage(),
       },
       theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        primaryColor: Color(0xFF212121),
+        canvasColor: Color(0xFF212121),
+        brightness: Brightness.dark,
       ),
     );
   }

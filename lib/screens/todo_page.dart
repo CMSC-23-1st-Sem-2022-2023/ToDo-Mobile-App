@@ -20,6 +20,7 @@ class TodoPage extends StatefulWidget {
   static List<User> users = [];
   static List<Todo> todos = [];
   static User? user;
+  static bool isStart = false;
 
   @override
   State<TodoPage> createState() => _TodoPageState();
@@ -34,8 +35,10 @@ class _TodoPageState extends State<TodoPage> {
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
     //context.read<UserListProvider>().getUsers;
 
-    UserListProvider().getUsers();
-    TodoListProvider().getTodos();
+    if (!TodoPage.isStart) {
+      UserListProvider().getUsers();
+      TodoListProvider().getTodos();
+    }
 
     /*while (TodoPage.users.length == 0) {
       print("1");
@@ -99,14 +102,21 @@ class _TodoPageState extends State<TodoPage> {
             );
           }
 
-          print("todo");
-
           return ListView.builder(
+            physics: const BouncingScrollPhysics(),
             itemCount: TodoPage.todos.length,
             itemBuilder: ((context, index) {
-              print("in todo");
               Todo todo = TodoPage.todos[index];
-              return Dismissible(
+              return Card(
+                margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
+                color: Color(0xFFFFC107),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                elevation: 10.0,
+                shadowColor: Colors.grey,
+                child:
+                    /* return Dismissible(
                 key: Key(todo.id.toString()),
                 onDismissed: (direction) {
                   context.read<TodoListProvider>().changeSelectedTodo(todo);
@@ -118,15 +128,24 @@ class _TodoPageState extends State<TodoPage> {
                 background: Container(
                   color: Colors.red,
                   child: const Icon(Icons.delete),
-                ),
-                child: ListTile(
+                ), */
+                    ListTile(
                   title: Text(todo.title),
+                  subtitle: Text(todo.description),
                   leading: Checkbox(
                     value: todo.completed,
                     onChanged: (bool? value) {
-                      context
-                          .read<TodoListProvider>()
-                          .toggleStatus(index, value!);
+                      if (TodoPage.user!.todos.contains(todo.id)) {
+                        context
+                            .read<TodoListProvider>()
+                            .changeSelectedTodo(todo);
+                        context
+                            .read<TodoListProvider>()
+                            .toggleStatus(index, value!);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('This is not your todo.')));
+                      }
                     },
                   ),
                   trailing: Row(
@@ -154,8 +173,12 @@ class _TodoPageState extends State<TodoPage> {
                               context: context,
                               builder: (BuildContext context) => TodoModal(
                                 type: 'Delete',
+                                todo: todo,
                               ),
                             );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('This is not your todo.')));
                           }
                         },
                         icon: const Icon(Icons.delete_outlined),
@@ -174,6 +197,7 @@ class _TodoPageState extends State<TodoPage> {
             context: context,
             builder: (BuildContext context) => TodoModal(
               type: 'Add',
+              todo: null,
             ),
           );
         },
