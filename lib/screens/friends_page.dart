@@ -1,7 +1,13 @@
 /*
   Created by: Roxanne Ysabel Resuello
-  Date: 11 November 2022
-  Description: Sample todo app with networking
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
 */
 
 import 'package:flutter/material.dart';
@@ -18,16 +24,12 @@ import 'friends_profile.dart';
 
 class FriendsPage extends StatefulWidget {
   const FriendsPage({super.key});
-  //static User? user;
-  //static List<User> users = [];
+
+  // Variable declaration
   static List<User> requests = [];
   static List<User> friends = [];
   static int userLength = TodoPage.users.length;
   static bool isLoaded = false;
-  //static Stream<QuerySnapshot>? usersStream;
-
-  /* final _FriendsPageState vpcs = _FriendsPageState();
-  vpcs.getLength; */
 
   @override
   State<FriendsPage> createState() => _FriendsPageState();
@@ -36,66 +38,14 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   @override
   Widget build(BuildContext context) {
-    /*
-    return Scaffold(
-      appBar: AppBar(title: Text("Friends")),
-    );
-    // access the list of users in the provider
-    */
-    Stream<QuerySnapshot> usersStream =
-        context.watch<UserListProvider>().users.asBroadcastStream();
-    //FriendsPage.usersStream = usersStream;
-    /* List<User> users = [];
-    usersStream.forEach((doc) {
-      print(5);
-      print(doc);
-      User.fromJson(doc.docs[0].data() as Map<String, dynamic>);
-    }); */
-
-    //for (QuerySnapshot<Object> docs in usersStream) {}
-
-    //print(users.length);
-
-    /*
-    Future<int> getLength() async {
-      final length = await UserListProvider().getLength();
-      return length;
-    }
-
-    getLength().then((value) {
-      FriendsPage.userLength = value;
-      FriendsPage.isLoaded = true;
-    });
-    */
-
-    //sersStream.
-
-    //UserListProvider();
-    //List<User> users = usersStream.forEach((doc) => {User.fromJson(doc as Map<String, dynamic>)});
-    //User user = context.watch<UserListProvider>().selected;
-    //print(usersStream);
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Friends"),
         actions: <Widget>[
-          /*IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => UserModal(
-                  otherUser: TodoPage.user!,
-                  user: TodoPage.user!,
-                  type: 'send',
-                  requests: [],
-                ),
-              );
-            },
-          ),*/
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
+              // Show dialog for searching a friend
               showDialog(
                 context: context,
                 builder: (BuildContext context) => UserModal(
@@ -111,80 +61,14 @@ class _FriendsPageState extends State<FriendsPage> {
       ),
       body: ListView.builder(
         itemCount: TodoPage.user!.friends.length,
-        //future: FriendsPage.usersStream,
         itemBuilder: (context, index) {
-          //FriendsPage.requests = [];
-          //FriendsPage.friends = [];
-
-          /* if (snapshot.hasError) {
-            return Center(
-              child: Text("Error encountered! ${snapshot.error}"),
-            );
-          } else if (!snapshot.hasData ||
-              snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.data?.docs.length == 1 ||
-              TodoPage.user!.friends.length == 0) {
-            return Center(
-              child: Text("No Friends Found"),
-            );
-          } */
-
-          if (TodoPage.user!.friends.isEmpty) {
-            return const Center(
-              child: Text("No Friends Found"),
-            );
-          }
-
-          /* User user = User.fromJson(
-              snapshot.data?.docs.first.data() as Map<String, dynamic>);
-          FriendsPage.user = user; */
-
-          //int length = TodoPage.user!.friends.length;
-          //List<User> friends = [];
-
-          /* for (int i = 0; i < FriendsPage.userLength; i++) {
-            User checkUser = User.fromJson(
-                snapshot.data?.docs[i].data() as Map<String, dynamic>);
-            FriendsPage.users.add(checkUser);
-            if (user.friends.contains(checkUser.id)) {
-              friends.add(checkUser);
-            }
-          } */
-
-          //FriendsPage.friends = friends;
-/* 
-          for (int i = 0; i < FriendsPage.userLength; i++) {
-            User checkUser = User.fromJson(
-                snapshot.data?.docs[i].data() as Map<String, dynamic>);
-            if (user.receivedFriendRequests.contains(checkUser.id)) {
-              FriendsPage.requests.add(checkUser);
-            }
-          } */
-
-          /* print('start');
-          for (int i = 0; i < FriendsPage.requests.length; i++) {
-            print(FriendsPage.requests[i].displayName);
-          }
-          print('end'); */
-
-          /*return ListView.builder(
-            itemCount: length,
-            itemBuilder: ((context, index) {*/
           User friend = FriendsPage.friends[index];
+
+          // Return a list tile for each friend
           return ListTile(
             title: Text(friend.name),
-            /* leading: Checkbox(
-                    value: todo.completed,
-                    onChanged: (bool? value) {
-                      context.read<UserListProvider>().changeSelectedTodo(user);
-                      //context.read<UserListProvider>().toggleStatus(value!);
-                    }, 
-                  ),*/
             onTap: () {
-              //print(friend.name);
+              // Go to friends profile when list tile is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -199,6 +83,7 @@ class _FriendsPageState extends State<FriendsPage> {
             },
             trailing: IconButton(
               onPressed: () {
+                // For deleting a friend
                 context.read<UserListProvider>().setUser(TodoPage.user!);
                 context.read<UserListProvider>().changeOtherUser(friend);
                 showDialog(
@@ -222,9 +107,7 @@ class _FriendsPageState extends State<FriendsPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //navigate to AddTaskPage page and automatically calls the setState()
-          //to render newly added task in textfile when Navigator.pop is called from AddTaskPage page
-          //Navigator.of(context).pushNamed('/request');
+          // Go to a dialog where requests are shown
           showDialog(
             context: context,
             builder: (BuildContext context) => UserModal(

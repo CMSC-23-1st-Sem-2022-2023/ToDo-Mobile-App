@@ -1,3 +1,15 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
@@ -29,10 +41,12 @@ class AuthProvider with ChangeNotifier {
     return user != null;
   }
 
+  // Function for signing in
   void signIn(String email, String password) {
     authService.signIn(email, password);
   }
 
+  // Sign out function
   void signOut() {
     TodoPage.isStart = false;
     TodoPage.todos = [];
@@ -44,6 +58,7 @@ class AuthProvider with ChangeNotifier {
     authService.signOut();
   }
 
+  // Sign up function
   void signUp(String name, String birthday, String bio, String location,
       String email, String password) {
     authService.signUp(name, birthday, bio, location, email, password);

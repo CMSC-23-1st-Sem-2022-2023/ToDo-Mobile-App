@@ -1,13 +1,13 @@
 /*
   Created by: Roxanne Ysabel Resuello
-  Date: 11 November 2022
-  Description: Description: A mobile application that allows you to do the following:
-  1. Add a friend
-  2. Delete a friend
-  3. Accept a friend request
-  4. Decline a friend request
-  5. Search a friend
-  6. Send a friend request
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
 */
 
 import 'package:flutter/material.dart';
@@ -111,54 +111,4 @@ class UserListProvider with ChangeNotifier {
     print(message);
     notifyListeners();
   }
-
-  Future<int> getLength() async {
-    int length = await firebaseService.getLength();
-    return length;
-  }
-
-  /*
-  void addTodo(User item) async {
-    String message = await firebaseService.addTodo(item.toJson(item));
-    print(message);
-    notifyListeners();
-  }
-
-  void editTodo(String newString) async {
-    String message =
-        await firebaseService.editTodo(_selectedTodo!.id, newString);
-    print(message);
-    notifyListeners();
-  }
-
-  void addFriend(String newString) async {
-    String message =
-        await firebaseService.addFriend(_selectedUser!.id, newString);
-    print("Added");
-    notifyListeners();
-  }
-
-  
-
-  void sendRequest(String newString) async {
-    String message =
-        await firebaseService.editTodo(_selectedTodo!.id, newString);
-    print(message);
-    notifyListeners();
-  }
-
-
-  void deleteTodo() async {
-    String message = await firebaseService.deleteTodo(_selectedTodo!.id);
-    print(message);
-    notifyListeners();
-  }
-
-  void toggleStatus(bool status) async {
-    String message =
-        await firebaseService.toggleStatus(_selectedTodo!.id, status);
-    print(message);
-    notifyListeners();
-  }
-*/
 }

@@ -1,3 +1,15 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
@@ -17,21 +29,22 @@ class FirebaseTodoAPI {
 
     // Get data from docs and convert map to List
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    //print(allData);
 
+    // Get each todo and save to an array in the todo page
     for (int i = 0; i < allData.length; i++) {
       Todo newTodo = Todo.fromJson(allData[i] as Map<String, dynamic>);
+      TodoPage.alltodos.add(newTodo);
+
       if (TodoPage.user!.todos.contains(newTodo.id) ||
           TodoPage.user!.friends.contains(newTodo.userId)) {
-        if (!TodoPage.todos.contains(newTodo)) {
-          TodoPage.todos.add(newTodo);
-        }
+        TodoPage.todos.add(newTodo);
       }
-      print(newTodo.title);
+      //print(newTodo.title);
     }
-    print('todo length: ${TodoPage.todos.length}');
+    //print('todo length: ${TodoPage.todos.length}');
   }
 
+  // Function for adding a todo
   Future<String> addTodo(Map<String, dynamic> todo, Todo currentTodo) async {
     try {
       final docRef = await db.collection("todos").add(todo);
@@ -46,10 +59,12 @@ class FirebaseTodoAPI {
     }
   }
 
+  // Function for getting all todos
   Stream<QuerySnapshot> getAllTodos() {
     return db.collection("todos").snapshots();
   }
 
+  // Function for deleting todo
   Future<String> deleteTodo(String? id) async {
     try {
       await db.collection("todos").doc(id).delete();
@@ -61,10 +76,25 @@ class FirebaseTodoAPI {
     }
   }
 
+  // Function for changing status of the todo
   Future<String> changeStatusTodo(String? id, Todo todo) async {
     try {
       final docRef = db.collection('todos').doc(id);
       await docRef.update({'completed': todo.completed});
+
+      return "Toggle Status";
+    } on FirebaseException catch (e) {
+      return "Failed with error '${e.code}: ${e.message}";
+    }
+  }
+
+  Future<String> editTodo(String? id, Todo todo) async {
+    try {
+      final docRef = db.collection('todos').doc(id);
+      await docRef.update({'deadline': todo.deadline});
+      await docRef.update({'title': todo.title});
+      await docRef.update({'description': todo.description});
+      await docRef.update({'edit': todo.edit});
 
       return "Toggle Status";
     } on FirebaseException catch (e) {

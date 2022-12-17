@@ -1,7 +1,13 @@
 /*
-  Created by: Claizel Coubeili Cepe
-  Date: 27 October 2022
-  Description: Sample todo app with networking
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
 */
 
 import 'package:flutter/material.dart';
@@ -10,12 +16,18 @@ import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/providers/todo_provider.dart';
 import 'package:week7_networking_discussion/providers/user_provider.dart';
 import 'package:week7_networking_discussion/screens/todo_page.dart';
+import 'package:week7_networking_discussion/api/notification_api.dart';
 
 class TodoModal extends StatefulWidget {
   String type = '';
   Todo? todo;
+  late final NotificationApi service;
 
-  TodoModal({super.key, required this.type, required this.todo});
+  TodoModal(
+      {super.key,
+      required this.type,
+      required this.todo,
+      required this.service});
   @override
   _TodoModalState createState() => _TodoModalState();
 }
@@ -38,9 +50,9 @@ class _TodoModalState extends State<TodoModal> {
       case 'Add':
         return const Center(child: Text("Add new todo"));
       case 'Edit':
-        return const Text("Edit todo");
+        return const Center(child: Text("Edit todo"));
       case 'Delete':
-        return const Text("Delete todo");
+        return const Center(child: Text("Delete todo"));
       default:
         return const Text("");
     }
@@ -48,9 +60,7 @@ class _TodoModalState extends State<TodoModal> {
 
   // Method to build the content or body depending on the functionality
   Widget _buildContent(BuildContext context) {
-    // Use context.read to get the last updated list of todos
-    // List<Todo> todoItems = context.read<TodoListProvider>().todo;
-
+    // Status checkbox
     final status = Row(children: [
       Text("Completed: "),
       Checkbox(
@@ -63,8 +73,9 @@ class _TodoModalState extends State<TodoModal> {
       )
     ]);
 
+    // Notif checkbox
     final notif = Row(children: [
-      Text("Notification: "),
+      Icon(Icons.notifications_active),
       Checkbox(
         value: notification,
         onChanged: (bool? value) {
@@ -75,6 +86,7 @@ class _TodoModalState extends State<TodoModal> {
       )
     ]);
 
+    //Deadline field
     final deadline = Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
@@ -87,7 +99,6 @@ class _TodoModalState extends State<TodoModal> {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100));
-
               if (newDate == null) return;
               deadlineDate =
                   "${newDate.year.toString()}/${newDate.month.toString()}/${newDate.day.toString()}";
@@ -124,7 +135,7 @@ class _TodoModalState extends State<TodoModal> {
                     ),
                     border: OutlineInputBorder()),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               TextField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(
@@ -137,32 +148,77 @@ class _TodoModalState extends State<TodoModal> {
               ),
               SizedBox(height: 10),
               Row(
-                children: [status, notif],
+                children: [
+                  status,
+                  SizedBox(
+                    width: 10,
+                  ),
+                  notif
+                ],
               )
             ],
           );
         }
       // Edit and add will have input field in them
       default:
-        return TextField(
-          controller: _formFieldController,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            // hintText: todoIndex != -1 ? todoItems[todoIndex].title : '',
-          ),
+        return Column(
+          children: [
+            Text('Last edit: ${widget.todo!.edit}'),
+            deadline,
+            TextField(
+              controller: _formFieldController,
+              decoration: const InputDecoration(
+                  labelText: 'Title',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                  ),
+                  border: OutlineInputBorder()),
+            ),
+            SizedBox(height: 20),
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                  labelText: 'Description',
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                  ),
+                  border: OutlineInputBorder()),
+            ),
+          ],
         );
     }
   }
 
-  TextButton _dialogAction(BuildContext context) {
-    // List<Todo> todoItems = context.read<TodoListProvider>().todo;
+  // Function for showing notification
+  void showNotif(int task, String title) async {
+    if (task == 0) {
+      await widget.service.showNotification(
+          id: 0, title: 'Todo', body: 'A new todo has been added');
+    } else if (task == 1) {
+      await widget.service.showNotification(
+          id: 0, title: 'Todo', body: '$title has been deleted.');
+    } else {
+      await widget.service.showNotification(
+          id: 0, title: 'Todo', body: '$title has been edited.');
+    }
+  }
 
+  TextButton _dialogAction(BuildContext context) {
     return TextButton(
       onPressed: () {
         switch (widget.type) {
           case 'Add':
             {
-              // Instantiate a todo objeect to be inserted, default userID will be 1, the id will be the next id in the list
+              // For adding a new todo
+              // Instantiate a todo object to be inserted
+
+              if (deadlineDate.length == 0) {
+                deadlineDate =
+                    '${date.year.toString()}/${date.month.toString()}/${date.day.toString()}';
+              }
+
               Todo temp = Todo(
                   userId: TodoPage.user!.id,
                   deadline: deadlineDate,
@@ -175,6 +231,11 @@ class _TodoModalState extends State<TodoModal> {
 
               TodoPage.todos.add(temp);
               context.read<TodoListProvider>().addTodo(temp);
+
+              if (temp.notification == true) {
+                showNotif(0, temp.title);
+              }
+
               //context.read<UserListProvider>().addTodo(TodoPage.user!.todos);
 
               // Remove dialog after adding
@@ -183,9 +244,23 @@ class _TodoModalState extends State<TodoModal> {
             }
           case 'Edit':
             {
-              //context
-              //  .read<TodoListProvider>()
-              //.editTodo(todoIndex, _formFieldController.text);
+              // For editing a todo
+              if (deadlineDate.length == 0) {
+                deadlineDate =
+                    '${date.year.toString()}/${date.month.toString()}/${date.day.toString()}';
+              }
+
+              widget.todo!.edit =
+                  '${TodoPage.user!.name} - ${now.month.toString()}/${now.day.toString()} ${now.hour.toString()}:${now.minute.toString()}';
+              widget.todo!.title = _formFieldController.text;
+              widget.todo!.description = _descriptionController.text;
+              widget.todo!.deadline = deadlineDate;
+
+              context.read<TodoListProvider>().editTodo(widget.todo!);
+
+              if (widget.todo!.notification == true) {
+                showNotif(2, widget.todo!.title);
+              }
 
               // Remove dialog after editing
               Navigator.of(context).pop();
@@ -193,9 +268,14 @@ class _TodoModalState extends State<TodoModal> {
             }
           case 'Delete':
             {
+              // For deleting a todo
               TodoPage.todos.remove(widget.todo);
               TodoPage.user!.todos.remove(widget.todo!.id);
               context.read<TodoListProvider>().deleteTodo();
+
+              if (widget.todo!.notification == true) {
+                showNotif(1, widget.todo!.title);
+              }
 
               // Remove dialog after editing
               Navigator.of(context).pop();

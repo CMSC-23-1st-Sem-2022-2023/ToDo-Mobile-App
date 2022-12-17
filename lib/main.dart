@@ -17,6 +17,7 @@ import 'package:week7_networking_discussion/screens/profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   //Comment for testing
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

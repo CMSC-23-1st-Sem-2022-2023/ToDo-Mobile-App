@@ -1,11 +1,23 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:week7_networking_discussion/screens/login.dart';
 
 class FirebaseAuthAPI {
+  // Variable declaration
   static final FirebaseAuth auth = FirebaseAuth.instance;
   static final FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -24,6 +36,7 @@ class FirebaseAuthAPI {
     displayName: 'Charlie',
   )); */
 
+  // Function for saving new user to firestore
   void saveUserToFirestore(String? uid, String birthday, String email,
       String name, String location, String bio) async {
     try {
@@ -48,10 +61,12 @@ class FirebaseAuthAPI {
     }
   }
 
+  // Function for getting current user
   Stream<User?> getUser() {
     return auth.authStateChanges();
   }
 
+  // Function for signing in
   void signIn(String email, String password) async {
     UserCredential credential;
     try {
@@ -72,6 +87,7 @@ class FirebaseAuthAPI {
     }
   }
 
+  //Function for signing up
   void signUp(String name, String birthday, String bio, String location,
       String email, String password) async {
     UserCredential credential;
@@ -96,6 +112,7 @@ class FirebaseAuthAPI {
     }
   }
 
+  // Signout function
   void signOut() async {
     auth.signOut();
   }

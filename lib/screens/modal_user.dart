@@ -1,7 +1,13 @@
 /*
-  Created by: Roxanne Ysabel Reuslloe
-  Date: 11 November 2022
-  Description: 
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
 */
 
 import 'package:flutter/material.dart';
@@ -26,8 +32,6 @@ class UserModal extends StatelessWidget {
     required this.requests,
   });
 
-  //UserModal.search({super.key, required this.users, required this.type, required this.user});
-
   // Method to show the title of the modal depending on the functionality
   Text _buildTitle() {
     switch (type) {
@@ -45,28 +49,9 @@ class UserModal extends StatelessWidget {
   // Method to build the content or body depending on the functionality
   Widget _buildContent(BuildContext context) {
     switch (type) {
-      case 'send':
-        {
-          return SizedBox(
-              height: 30,
-              child: Column(children: [
-                TextField(
-                  controller: _formFieldController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: 'type username of the user you like to add',
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      sendRequest(_formFieldController.text, context);
-                    },
-                    child: Text("Add"))
-              ]));
-        }
       case 'Delete':
         {
+          // For deleting a friend
           return Column(children: [
             const Padding(
                 padding: EdgeInsets.all(30),
@@ -75,6 +60,11 @@ class UserModal extends StatelessWidget {
                 )),
             ElevatedButton(
                 onPressed: () {
+                  for (int i = 0; i < TodoPage.todos.length; i++) {
+                    if (otherUser.todos.contains(TodoPage.todos[i].id)) {
+                      TodoPage.todos.remove(TodoPage.todos[i]);
+                    }
+                  }
                   context
                       .read<UserListProvider>()
                       .deleteFriend(user.friends, otherUser.friends);
@@ -87,6 +77,7 @@ class UserModal extends StatelessWidget {
         }
       case 'request':
         {
+          // For requesting to a friend
           int length = user.receivedFriendRequests.length;
           List<User> friendrequests = requests;
 
@@ -102,6 +93,13 @@ class UserModal extends StatelessWidget {
                   children: [
                     IconButton(
                       onPressed: () {
+                        for (int i = 0; i < TodoPage.alltodos.length; i++) {
+                          if (otherUser.todos
+                              .contains(TodoPage.alltodos[i].id)) {
+                            TodoPage.todos.add(TodoPage.alltodos[i]);
+                          }
+                        }
+
                         //Accept request
                         Navigator.of(context).pop();
                         user.receivedFriendRequests.remove(other.id);
@@ -169,52 +167,7 @@ class UserModal extends StatelessWidget {
     }
   }
 
-  void sendRequest(String text, BuildContext context) {
-    List<String> tempUsers = [];
-    User userToBeAdded = user;
-
-    for (int i = 0; i < FriendsPage.userLength; i++) {
-      //tempUsers.add(FriendsPage.users[i].userName);
-      //if (FriendsPage.users[i].userName == text) {
-      //  userToBeAdded = FriendsPage.users[i];
-      //}
-    }
-
-    if (tempUsers.contains(text)) {
-      if (user.friends.contains(userToBeAdded.id)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('This user is already your friend.')));
-
-        return;
-      }
-
-      if (user.sentFriendRequests.contains(userToBeAdded.id)) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('You already sent a request to this user.')));
-
-        return;
-      }
-
-      user.sentFriendRequests.add(userToBeAdded.id);
-      userToBeAdded.receivedFriendRequests.add(user.id);
-      FriendsPage.requests.add(userToBeAdded);
-      otherUser = userToBeAdded;
-
-      context.read<UserListProvider>().setUser(user);
-      context.read<UserListProvider>().changeOtherUser(userToBeAdded);
-
-      context.read<UserListProvider>().sendRequest(
-          user.sentFriendRequests, userToBeAdded.receivedFriendRequests);
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Friend request sent')));
-      return;
-    }
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('No user found.')));
-  }
-
+  // Gets the result of search
   void showSearch(String text, BuildContext context) {
     List<User> found = [];
     for (int i = 0; i < TodoPage.users.length; i++) {
@@ -258,9 +211,11 @@ class UserModal extends StatelessWidget {
                 return ListTile(
                   title: Text(otherUser.name),
                   trailing: IconButton(
-                    //Decline request
+                    //Send request
                     onPressed: () {
                       User userToBeAdded = found[index];
+
+                      // If user is already a friend
                       if (user.friends.contains(userToBeAdded.id)) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content:
@@ -269,6 +224,7 @@ class UserModal extends StatelessWidget {
                         return;
                       } else if (user.sentFriendRequests
                           .contains(userToBeAdded.id)) {
+                        // If you already send a friend request to the user
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 'You already send a friend request to this user.')));
@@ -276,11 +232,13 @@ class UserModal extends StatelessWidget {
                         return;
                       } else if (user.receivedFriendRequests
                           .contains(userToBeAdded.id)) {
+                        // If user is already in the friend request
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
                                 'This user is already in your friend request.')));
                         return;
                       } else {
+                        // Else send a friend request
                         user.sentFriendRequests.add(userToBeAdded.id);
                         userToBeAdded.receivedFriendRequests.add(user.id);
                         FriendsPage.requests.add(userToBeAdded);

@@ -1,3 +1,15 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
@@ -14,12 +26,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    // Variable initialization
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
     FirebaseAuthAPI.wrongEmail = false;
     FirebaseAuthAPI.wrongPass = false;
 
+    // Email text form field
     final email = TextFormField(
       key: const Key('emailField'),
       controller: emailController,
@@ -42,13 +56,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    bool checkPass() {
-      if (FirebaseAuthAPI.wrongPass == true) {
-        return true;
-      }
-      return false;
-    }
-
+    // Password text form field
     final password = TextFormField(
       key: const Key('pwField'),
       validator: (value) {
@@ -67,10 +75,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    // Login button
     final loginButton = Padding(
       key: const Key('loginButton'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Color(0xFFFFC107)),
         onPressed: () {
           context
               .read<AuthProvider>()
@@ -83,10 +93,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    // Signup button
     final signUpButton = Padding(
       key: const Key('signUpButton'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Color(0xFFFFC107)),
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(

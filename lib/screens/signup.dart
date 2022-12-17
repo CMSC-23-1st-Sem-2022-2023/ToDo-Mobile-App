@@ -1,3 +1,15 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/api/firebase_auth_api.dart';
@@ -11,6 +23,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  // Variable initialization
   DateTime date = DateTime.now();
   String bday = '';
   TextEditingController passwordController = TextEditingController();
@@ -23,23 +36,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
-    //bool validateFirst = firstNameController.text.isEmpty ? true : false;
-    //bool validateFirst2 = false;
-
-    /*bool validate(String input) {
-      if (input != null || input.isNotEmpty) {
-        return true;
-      }
-      return false;
-    }*/
-
-    /* String validateFirst(bool validateLast) {
-      if (validateLast == true) {
-        return "Enter text";
-      }
-      return '';
-    } */
-
+    // Name text form field
     final name = TextFormField(
       key: const Key('fName'),
       controller: nameController,
@@ -54,46 +51,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
-    /* Future<void> _selectDate(BuildContext context) async {
-      final now = DateTime.now();
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: date ?? now,
-          firstDate: DateTime(1951),
-          lastDate: DateTime(2023));
-      if (picked != null && picked != date) {
-        print('hello $picked');
-        date = picked;
-      }
-    } */
-/* 
-    Widget birthday1(BuildContext context) {
-      return TextFormField(
-        validator: (value) {
-          if (value!.isEmpty || value == null) {
-            return 'Birthday is required.';
-          }
-          return null;
-        },
-        controller: birthdayController, //editing controller of this TextField
-        decoration: const InputDecoration(
-            icon: Icon(Icons.calendar_today), //icon of text field
-            labelText: "Birthday" //label text of field
-            ),
-        readOnly: true, //set it true, so that user will not able to edit text
-        onTap: () async {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          // Show Date Picker Here
-          await _selectDate(context);
-
-          setState(() {
-            print(date);
-            birthdayController.text = DateFormat('yyyy/MM/dd').format(date!);
-          });
-        },
-      );
-    } */
-
+    // Birthday text form field
     final birthday = Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
@@ -121,6 +79,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    // Location text form field
     final location = TextFormField(
       key: const Key('locationField'),
       controller: locationController,
@@ -135,6 +94,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    // Bio text form field
     final bio = TextFormField(
       key: const Key('bioField'),
       controller: bioController,
@@ -149,6 +109,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    // Email text form field
     final email = TextFormField(
       key: const Key('sEmail'),
       controller: emailController,
@@ -168,6 +129,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    // Password text form field
     final password = TextFormField(
       key: const Key('passwordField'),
       controller: passwordController,
@@ -183,10 +145,12 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
+    // Signup button
     final signupButton = Padding(
       key: const Key('signUp'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Color(0xFFFFC107)),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             context.read<AuthProvider>().signUp(
@@ -203,24 +167,17 @@ class _SignupPageState extends State<SignupPage> {
             }
             Navigator.pop(context);
           }
-
-          //call the auth provider here
-          /* context.read<AuthProvider>().signUp(
-              emailController.text,
-              passwordController.text,
-              firstNameController.text,
-               lastNameController.text);
-          //Navigator.pop(context);
-          */
         },
         child: const Text('Sign up', style: TextStyle(color: Colors.white)),
       ),
     );
 
+    // Back button
     final backButton = Padding(
       key: const Key('back'),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: Color(0xFFFFC107)),
         onPressed: () async {
           Navigator.pop(context);
         },

@@ -1,3 +1,15 @@
+/*
+  Created by: Roxanne Ysabel Resuello
+  Date: 21 November 2022
+  Description: A shared todo flutter app that uses firebase with the following features:
+                1. Add, delete, and edit a todo
+                2. Add and delete a friend
+                3. Accept and decline a friend request
+                4. Sign in, Login, and Logout an account
+                5. View profile
+                6. View friend's profile
+*/
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
@@ -9,48 +21,11 @@ class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
   static final users = FirebaseFirestore.instance.collection('users');
 
-  //inal docRef = db.collection("users").doc('kuND0KXmc148REGSIL5G');
-
-  /*
-  Future<String> addUser(Map<String, dynamic> todo) async {
-    try {
-      final docRef = await db.collection("users").add(todo);
-      await db.collection("todos").doc(docRef.id).update({'id': docRef.id});
-
-      return "Successfully added the user!";
-    } on FirebaseException catch (e) {
-      return "Failed with error '${e.code}: ${e.message}";
-    }
-  }
-  */
-
   Stream<QuerySnapshot> getAllUsers() {
     return db.collection("users").snapshots();
   }
 
-  /*void getUsers() async {
-    await users.get().then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        User user = User.fromJson(doc.data() as Map<String, dynamic>);
-        print("hi");
-      });
-    });
-  }*/
-/*
-  Future<void> setCurrentUser(String email) async {
-    QuerySnapshot querySnapshot =
-        await users.where('email', isEqualTo: email).get();
-
-    /*for (var snapshot in querySnapshot.docs) {
-      Map<String, dynamic> data = snapshot.data() as M;
-    }*/
-    print("object");
-    TodoPage.user =
-        User.fromJson(querySnapshot.docs[0].data() as Map<String, dynamic>);
-    print(TodoPage.user!.name);
-  }
-  */
-
+  // Function for getting all users and saving it in an array in todo page
   Future<void> getUsers() async {
     TodoPage.isStart = true;
     // Get docs from collection reference
@@ -60,29 +35,24 @@ class FirebaseUserAPI {
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     //print(allData);
 
+    // For each user, add it to the array
     for (int i = 0; i < allData.length; i++) {
       User newUser = User.fromJson(allData[i] as Map<String, dynamic>);
       TodoPage.users.add(newUser);
-      print(newUser.email);
+      //print(newUser.email);
     }
 
-    //print(TodoPage.users.length);
+    // Set the current logged in user
     for (int i = 0; i < TodoPage.users.length; i++) {
       //print(TodoPage.users[i].email);
       if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
         TodoPage.user = TodoPage.users[i];
-        print("here");
-        print(TodoPage.user!.name);
+        //print("here");
+        //print(TodoPage.user!.name);
       }
     }
 
-    /* if (!TodoPage.users.contains(TodoPage.user)) {
-      print("AYOS");
-    } else {
-      print("WEH");
-    } */
-
-    // Get friends
+    // Get friends of the user
     for (int i = 0; i < TodoPage.users.length; i++) {
       User checkUser = TodoPage.users[i];
 
@@ -100,23 +70,10 @@ class FirebaseUserAPI {
         FriendsPage.requests.add(checkUser);
       }
     }
-    print('friends ${FriendsPage.friends.length}');
+    //print('friends ${FriendsPage.friends.length}');
   }
 
-/* 
-  void tryy(){
-    final FirebaseUser cuser = await auth.currentUser();
-final userid = cuser.uid;
-  } */
-
-  Future<int> getLength() async {
-    var length = await db.collection('users').get().then((querySnapshot) {
-      FriendsPage.userLength = querySnapshot.size;
-      FriendsPage.isLoaded = true;
-    });
-    return length;
-  }
-
+  // Function for deleting a friend
   Future<String> deleteFriend(String? id, List<dynamic> friends) async {
     try {
       final docRef = db.collection('users').doc(id);
@@ -128,28 +85,31 @@ final userid = cuser.uid;
     }
   }
 
+  //Function for adding a todo, updates the list of todo in firestore
   Future<String> addTodo(String? id, List<dynamic> todos) async {
     try {
       final docRef = db.collection('users').doc(id);
       await docRef.update({'todos': todos});
 
-      return "Successfully accepted a friend!";
+      return "Successfully added a todo!";
     } on FirebaseException catch (e) {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
 
+  //Function for adding a todo, updates the list of todo in firestore
   Future<String> deleteTodo(String? id, List<dynamic> todos) async {
     try {
       final docRef = db.collection('users').doc(id);
       await docRef.update({'todos': todos});
 
-      return "Successfully deleted a friend!";
+      return "Successfully deleted a todo!";
     } on FirebaseException catch (e) {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
 
+  //Function for accepting a request, updates the list of todo in firestore
   Future<String> acceptRequest(String? id, List<dynamic> friends) async {
     try {
       final docRef = db.collection('users').doc(id);
@@ -161,17 +121,19 @@ final userid = cuser.uid;
     }
   }
 
+  //Function for sending a request, updates the list of sentFriendRequest in firestore
   Future<String> sendRequest(String? id, List<dynamic> sent) async {
     try {
       final docRef = db.collection('users').doc(id);
       await docRef.update({'sentFriendRequests': sent});
 
-      return "Successfully sent a friend!";
+      return "Successfully sent a friend request!";
     } on FirebaseException catch (e) {
       return "Failed with error '${e.code}: ${e.message}";
     }
   }
 
+  //Function for receiving a request, updates the list of receivedFriendRequest in firestore
   Future<String> receiveRequest(String? id, List<dynamic> received) async {
     try {
       final docRef = db.collection('users').doc(id);
@@ -183,9 +145,9 @@ final userid = cuser.uid;
     }
   }
 
+  //Function for deleting a request, updates the list of receivedFriendRequest in firestore
   Future<String> deleteRequest(String? id, List<dynamic> received) async {
     try {
-      print(id);
       final docRef = db.collection('users').doc(id);
       await docRef.update({'receivedFriendRequests': received});
 
@@ -195,9 +157,9 @@ final userid = cuser.uid;
     }
   }
 
+  //Function for deleting a sent request, updates the list of sentFriendRequest in firestore
   Future<String> deleteSent(String? id, List<dynamic> sent) async {
     try {
-      print(id);
       final docRef = db.collection('users').doc(id);
       await docRef.update({'sentFriendRequests': sent});
 
