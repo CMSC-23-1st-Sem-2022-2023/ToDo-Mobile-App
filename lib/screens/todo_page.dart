@@ -64,45 +64,50 @@ class _TodoPageState extends State<TodoPage> {
     return Scaffold(
       // App drawer
       drawer: Drawer(
+          key: const Key('drawer'),
           child: ListView(padding: EdgeInsets.zero, children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Color(0xFFFFC107),
-          ),
-          child: Text('Todo App'),
-        ),
-        ListTile(
-          leading: Icon(Icons.task),
-          title: const Text('Todos'),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.person),
-          title: const Text('Profile'),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/profile');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.people),
-          title: const Text('Friends'),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/friends');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.logout),
-          title: const Text('Logout'),
-          onTap: () {
-            context.read<AuthProvider>().signOut();
-            Navigator.pop(context);
-          },
-        ),
-      ])),
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFFFFC107),
+              ),
+              child: Text('Todo App'),
+            ),
+            ListTile(
+              key: const Key('todo'),
+              leading: Icon(Icons.task),
+              title: const Text('Todos'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              key: const Key('profile'),
+              leading: Icon(Icons.person),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/profile');
+              },
+            ),
+            ListTile(
+              key: const Key('friends'),
+              leading: Icon(Icons.people),
+              title: const Text('Friends'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/friends');
+              },
+            ),
+            ListTile(
+              key: const Key('logout'),
+              leading: Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                context.read<AuthProvider>().signOut();
+                Navigator.pop(context);
+              },
+            ),
+          ])),
       appBar: AppBar(
         title: const Text(
           "Todo",
@@ -219,6 +224,7 @@ class _TodoPageState extends State<TodoPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        key: const Key('addButton'),
         backgroundColor: Color(0xFFFFC107),
         onPressed: () {
           // Add a todo

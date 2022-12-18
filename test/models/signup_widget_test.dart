@@ -16,15 +16,19 @@ void main() {
 
     final screenDisplay = find.text('Sign Up');
     final firstNameField = find.byKey(const Key("fName"));
-    final lastNameField = find.byKey(const Key("lName"));
+    final bdayField = find.byKey(const Key("bday"));
+    final locationField = find.byKey(const Key("locationField"));
+    final bioField = find.byKey(const Key("bioField"));
     final emailField = find.byKey(const Key("sEmail"));
-    final passwordField = find.byKey(const Key("sPass"));
+    final passwordField = find.byKey(const Key("passwordField"));
     final signupButton2 = find.byKey(const Key("signUp"));
     final backButton = find.byKey(const Key("back"));
 
     expect(screenDisplay, findsOneWidget);
     expect(firstNameField, findsOneWidget);
-    expect(lastNameField, findsOneWidget);
+    expect(bdayField, findsOneWidget);
+    expect(locationField, findsOneWidget);
+    expect(bioField, findsOneWidget);
     expect(passwordField, findsOneWidget);
     expect(emailField, findsOneWidget);
     expect(signupButton2, findsOneWidget);
@@ -48,14 +52,16 @@ void main() {
 
     // Check if the error texts appear
     final screenDisplay = find.text('Sign Up');
-    final firstNameError = find.text('Enter first name');
-    final lastNameError = find.text('Enter last name');
+    final firstNameError = find.text('Enter name');
+    final bio = find.text('Enter bio');
+    final location = find.text('Enter location');
     final emailError = find.text('Enter valid email address');
     final passwordError = find.text('Password must be atleast 6');
 
     expect(screenDisplay, findsOneWidget);
     expect(firstNameError, findsOneWidget);
-    expect(lastNameError, findsOneWidget);
+    expect(bio, findsOneWidget);
+    expect(location, findsOneWidget);
     expect(emailError, findsOneWidget);
     expect(passwordError, findsOneWidget);
   });
@@ -97,15 +103,19 @@ void main() {
     await tester.enterText(firstNameField, 'rox');
     await tester.pump(Duration(milliseconds: 400));
 
-    final lastNameField = find.byKey(const Key("lName"));
-    await tester.enterText(lastNameField, 'resuello');
+    final locationField = find.byKey(const Key("locationField"));
+    await tester.enterText(locationField, 'Batangas');
+    await tester.pump(Duration(milliseconds: 400));
+
+    final bioField = find.byKey(const Key("bioField"));
+    await tester.enterText(bioField, 'hi');
     await tester.pump(Duration(milliseconds: 400));
 
     final emailField = find.byKey(const Key("sEmail"));
     await tester.enterText(emailField, 'rox@gmail.com');
     await tester.pump(Duration(milliseconds: 400));
 
-    final passwordField = find.byKey(const Key("sPass"));
+    final passwordField = find.byKey(const Key("passwordField"));
     await tester.enterText(passwordField, '123123');
     await tester.pump(Duration(milliseconds: 400));
 
@@ -116,5 +126,47 @@ void main() {
 
     final todoScreen = find.text('Todo');
     expect(todoScreen, findsOneWidget);
+  });
+
+  testWidgets('Test add button', (tester) async {
+    app.main();
+
+    final loginButton = find.byKey(const Key("loginButton"));
+    await tester.tap(loginButton);
+
+    await tester.pumpAndSettle();
+
+    final todoScreen = find.text('Todo');
+    expect(todoScreen, findsOneWidget);
+
+    final addButton = find.byKey(const Key("addButton"));
+    await tester.tap(addButton);
+    await tester.pumpAndSettle();
+
+    final addModal = find.text('Add new todo');
+    expect(addModal, findsOneWidget);
+  });
+
+  testWidgets('Test logout button', (tester) async {
+    app.main();
+
+    final loginButton = find.byKey(const Key("loginButton"));
+    await tester.tap(loginButton);
+
+    await tester.pumpAndSettle();
+
+    final todoScreen = find.text('Todo');
+    expect(todoScreen, findsOneWidget);
+
+    await tester.dragFrom(
+        tester.getTopLeft(find.byType(MaterialApp)), Offset(300, 0));
+    await tester.pumpAndSettle();
+
+    final logoutButton = find.byType(ListTile).last;
+    await tester.tap(logoutButton);
+    await tester.pumpAndSettle();
+
+    final loginScreen = find.text('Login');
+    expect(loginScreen, findsOneWidget);
   });
 }

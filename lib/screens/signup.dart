@@ -53,6 +53,7 @@ class _SignupPageState extends State<SignupPage> {
 
     // Birthday text form field
     final birthday = Padding(
+      key: const Key('bday'),
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         children: [
@@ -85,7 +86,7 @@ class _SignupPageState extends State<SignupPage> {
       controller: locationController,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter location name';
+          return 'Enter location';
         }
         return null;
       },

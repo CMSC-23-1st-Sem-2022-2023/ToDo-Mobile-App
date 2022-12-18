@@ -23,6 +23,9 @@ class FirebaseTodoAPI {
   //final db = FakeFirebaseFirestore();
 
   Future<void> getTodos() async {
+    //Uncomment for testing
+    //final todo = db.collection('todos');
+
     TodoPage.isStart = true;
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await todo.get();

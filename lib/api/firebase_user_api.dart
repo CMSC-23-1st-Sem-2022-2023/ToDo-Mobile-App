@@ -11,6 +11,7 @@
 */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:week7_networking_discussion/models/todo_model.dart';
 import 'package:week7_networking_discussion/screens/friends_page.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
@@ -21,12 +22,17 @@ class FirebaseUserAPI {
   static final FirebaseFirestore db = FirebaseFirestore.instance;
   static final users = FirebaseFirestore.instance.collection('users');
 
+  //Uncomment for testing
+  //final db = FakeFirebaseFirestore();
+
   Stream<QuerySnapshot> getAllUsers() {
     return db.collection("users").snapshots();
   }
 
   // Function for getting all users and saving it in an array in todo page
   Future<void> getUsers() async {
+    //Uncomment for testing
+    //final users = db.collection('users');
     TodoPage.isStart = true;
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await users.get();
