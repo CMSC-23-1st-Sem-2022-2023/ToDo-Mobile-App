@@ -53,7 +53,7 @@ User tapped sign up button and was directed to sign up page\
 ![Signup](/images/Signup.png)
 
 User inputted valid email and password in login page and was logged in.\
-![Login](/images/LoginSuccess.png)
+![Login](/images/Login.png)
 
 User inputted a first name, last name, and valid email and password.\
 ![SignupSuccess](/images/SignupSuccess.png)
@@ -91,10 +91,10 @@ User search a user\
 
 Unhappy path/s:\
 User did not input a first name, last name, valid email, or password when signing up\
-![SignupError](/images/SignupErrorPage.png)
+![SignupError](/images/SignupError.png)
 
 User did not input valid email and password in login page\
-![LoginError](/images/loginErrorPage.png)
+![LoginError](/images/LoginError.png)
 
 User tapped the delete of a not owned todo\
 ![NotOwnedTodo](/images/NotOwnedTodo.png)
