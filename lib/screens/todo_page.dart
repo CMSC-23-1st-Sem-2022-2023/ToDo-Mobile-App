@@ -29,6 +29,7 @@ class TodoPage extends StatefulWidget {
   static List<Todo> todos = [];
   static List<Todo> alltodos = [];
   static User? user = null;
+  static Function? func;
   static bool isStart = false;
 
   @override
@@ -45,9 +46,14 @@ class _TodoPageState extends State<TodoPage> {
     service.intialize();
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> todosStream = context.watch<TodoListProvider>().todos;
+    TodoPage.func = refresh;
 
     // If the user is newly logged in get all users and todos
     if (!TodoPage.isStart) {
@@ -126,6 +132,7 @@ class _TodoPageState extends State<TodoPage> {
             itemCount: TodoPage.todos.length,
             itemBuilder: ((context, index) {
               Todo todo = TodoPage.todos[index];
+
               return Card(
                 margin: EdgeInsets.fromLTRB(20, 30, 20, 0),
                 color: Color(0xFFFFC107),

@@ -65,10 +65,18 @@ class UserModal extends StatelessWidget {
                       TodoPage.todos.remove(TodoPage.todos[i]);
                     }
                   }
+
+                  TodoPage.user!.friends.remove(otherUser.id);
+                  otherUser.friends.remove(TodoPage.user!.id);
+
+                  FriendsPage.friends.remove(otherUser);
+
                   context
                       .read<UserListProvider>()
                       .deleteFriend(user.friends, otherUser.friends);
 
+                  FriendsPage.refresher!();
+                  TodoPage.func!();
                   // Remove dialog after delete
                   Navigator.of(context).pop();
                 },
@@ -94,14 +102,17 @@ class UserModal extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         for (int i = 0; i < TodoPage.alltodos.length; i++) {
-                          if (otherUser.todos
-                              .contains(TodoPage.alltodos[i].id)) {
+                          if (other.todos.contains(TodoPage.alltodos[i].id)) {
                             TodoPage.todos.add(TodoPage.alltodos[i]);
                           }
                         }
+                        print(TodoPage.todos.length);
 
                         //Accept request
-                        Navigator.of(context).pop();
+                        TodoPage.user!.friends.add(other.id);
+                        other.friends.add(user.id);
+                        FriendsPage.friends.add(other);
+
                         user.receivedFriendRequests.remove(other.id);
                         other.sentFriendRequests.remove(user.id);
                         friendrequests.remove(other);
@@ -110,9 +121,6 @@ class UserModal extends StatelessWidget {
                         context.read<UserListProvider>().setUser(user);
                         context.read<UserListProvider>().changeOtherUser(other);
 
-                        user.friends.add(other.id);
-                        other.friends.add(user.id);
-                        FriendsPage.friends.add(other);
                         context.read<UserListProvider>().deleteRequest(
                             user.receivedFriendRequests,
                             otherUser.sentFriendRequests);
@@ -120,6 +128,10 @@ class UserModal extends StatelessWidget {
                         context
                             .read<UserListProvider>()
                             .acceptRequest(user.friends, other.friends);
+
+                        TodoPage.func!();
+                        FriendsPage.refresher!();
+                        Navigator.of(context).pop();
                       },
                       icon: const Icon(Icons.check_rounded),
                     ),

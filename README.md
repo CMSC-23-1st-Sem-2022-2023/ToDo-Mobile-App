@@ -1,20 +1,37 @@
-# Exercise 07
-A mobile application allows a user to login and create a new account.
+# Project
+A shared todo flutter app that uses firebase with the following features:
+1. Add, delete, and edit a todo
+2. Add and delete a friend
+3. Accept and decline a friend request
+4. Sign in, Login, and Logout an account
+5. View profile
+6. View friend's profile
 
 ### Name: Roxanne Ysabel P. Resuello
 ### Student Number: 202002805
 ### Section: C1L
 
-## MILESTONE 2
 
-## Screenshots
+## Milestone 1
+
+
+## Milestone 2
 ![Appdrawer](/images/milestone2.png)
 ![Profile](/images/milestone2friends.png)
 ![Friends](/images/milestone2profile.png)
 
+## Milestone 3
+
 
 ## Things you did in the code
-Added an app drawer to navigate to different screens(Todo screen, friends screen, and Profile)
+To implement milestone 1, I used exercise 7 as my base code and just edited the signup page and the user model.\
+I added input fields for birthday, location, bio, and initialize the arrray for friends, sentFriendRequest, and\
+receivedFriendrequests. For milestone 2, I used my exercise 6 to implement the functions like accepting and\
+declining a friend request, and deleting a friend. Moreover, I used exercise 2 as my base code to implement the\
+profile page. I also added an app drawer to navigate to the different screens — Todos Page, Friends page, Profile,\
+and Logout button. For milestone 3, I used the week 7 discussion code as my base code to implement to features\
+like adding, deleting, and editing a todo.
+
 
 
 ## Challenges faced

@@ -37,24 +37,12 @@ class UserListProvider with ChangeNotifier {
   User get selected => _selectedUser!;
   User get otherUser => _otherUser!;
 
-  /* getUser() {
-    _selectedUser = null;
-    final docRef = firebaseService.docRef;
-    docRef.get().then(
-      (DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        _selectedUser = User.fromJson(data);
-      },
-      onError: (e) => print("Error getting document: $e"),
-    );
-    return _selectedUser;
-    //_selectedUser = User.fromJson(data);
-  } */
-
+  // Function for setting the curent user
   setUser(User user) {
     _selectedUser = user;
   }
 
+  // Function for setting the other user
   changeOtherUser(User user) {
     _otherUser = user;
   }
@@ -68,6 +56,7 @@ class UserListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Function for deleting a friend
   void deleteFriend(List<dynamic> friends, List<dynamic> otherFriends) async {
     String message =
         await firebaseService.deleteFriend(_selectedUser!.id, friends);
@@ -76,6 +65,7 @@ class UserListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Function for deleting a friend request
   void deleteRequest(List<dynamic> receivedfr, List<dynamic> sentfr) async {
     String message =
         await firebaseService.deleteRequest(_selectedUser!.id, receivedfr);
@@ -84,6 +74,7 @@ class UserListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Function for accepting a friend request
   void acceptRequest(List<dynamic> friends, List<dynamic> otherfriends) async {
     String message =
         await firebaseService.acceptRequest(_selectedUser!.id, friends);
@@ -92,18 +83,21 @@ class UserListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // Function for adding a todo
   void addTodo(List<dynamic> todos) async {
     String message = await firebaseService.addTodo(TodoPage.user!.id, todos);
     print(message);
     notifyListeners();
   }
 
+  // Function for deleting a todo
   void deleteTodo(List<dynamic> todos) async {
     String message = await firebaseService.deleteTodo(TodoPage.user!.id, todos);
     print(message);
     notifyListeners();
   }
 
+  // Function for sending a friend request
   void sendRequest(List<dynamic> newSent, List<dynamic> newReceived) async {
     String message =
         await firebaseService.sendRequest(_selectedUser!.id, newSent);

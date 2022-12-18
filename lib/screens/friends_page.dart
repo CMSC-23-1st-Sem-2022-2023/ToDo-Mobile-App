@@ -30,14 +30,20 @@ class FriendsPage extends StatefulWidget {
   static List<User> friends = [];
   static int userLength = TodoPage.users.length;
   static bool isLoaded = false;
+  static Function? refresher;
 
   @override
   State<FriendsPage> createState() => _FriendsPageState();
 }
 
 class _FriendsPageState extends State<FriendsPage> {
+  void refresh() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    FriendsPage.refresher = refresh;
     return Scaffold(
       appBar: AppBar(
         title: Text("Friends"),
@@ -89,9 +95,6 @@ class _FriendsPageState extends State<FriendsPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      TodoPage.user!.friends.remove(friend.id);
-                      friend.friends.remove(TodoPage.user!.id);
-
                       return UserModal(
                         otherUser: friend,
                         user: TodoPage.user!,
@@ -106,6 +109,7 @@ class _FriendsPageState extends State<FriendsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color(0xFFFFC107),
         onPressed: () {
           // Go to a dialog where requests are shown
           showDialog(
