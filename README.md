@@ -50,7 +50,7 @@ stream for todo and just fetch all the users at the start of the app or when a u
 ## Test Cases
 Happy paths: 
 User tapped sign up button and was directed to sign up page\
-![Signup](/images/SignupPage.png)
+![Signup](/images/Signup.png)
 
 User inputted valid email and password in login page and was logged in.\
 ![Login](/images/LoginSuccess.png)
@@ -58,13 +58,35 @@ User inputted valid email and password in login page and was logged in.\
 User inputted a first name, last name, and valid email and password.\
 ![SignupSuccess](/images/SignupSuccess.png)
 
-User tapped todo in app drawer
+User tapped todo in app drawer\
+![Todo](/images/Todo.png)
 
-User tapped friends in app drawer
+User tapped add button in todo page\
+![addTodo](/images/addTodo.png)
 
-User tapped profile
+User tapped edit button of a todo\
+![editTodo](/images/editTodo.png)
 
-User tapped logged out
+User tapped delete button of a todo\
+![editTodo](/images/deleteTodo.png)
+
+User tapped profile in app drawer\
+![Profile](/images/Profile.png)
+
+User tapped friends in app drawer\
+![Friends](/images/Friends.png)
+
+User tapped delete in friends\
+![deleteFriend](/images/deleteFriend.png)
+
+User tapped a friend\
+![friendProfile](/images/friendProfile.png)
+
+User tapped search button\
+![Search](/images/Search.png)
+
+User search a user\
+![SearchResult](/images/searchResult.png)
 
 
 Unhappy path/s:\
@@ -74,7 +96,14 @@ User did not input a first name, last name, valid email, or password when signin
 User did not input valid email and password in login page\
 ![LoginError](/images/loginErrorPage.png)
 
+User tapped the delete of a not owned todo\
+![NotOwnedTodo](/images/NotOwnedTodo.png)
+
 User typed a long title and description for todo
 
 ## References
+The profile screen UI design is based in https://www.behance.net/gallery/96438079/Profile-UI\
+
+jameelsocorro(2020) Github[Source code]https://github.com/jameelsocorro/profile_app_ui
+
 
