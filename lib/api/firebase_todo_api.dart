@@ -41,7 +41,8 @@ class FirebaseTodoAPI {
       }
       //print(newTodo.title);
     }
-    //print('todo length: ${TodoPage.todos.length}');
+    print('todo length: ${TodoPage.todos.length}');
+    TodoPage.func!();
   }
 
   // Function for adding a todo

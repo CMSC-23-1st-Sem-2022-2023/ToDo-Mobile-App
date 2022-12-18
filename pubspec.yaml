@@ -45,6 +45,7 @@ dependencies:
   fake_cloud_firestore: ^2.0.1
   firebase_auth_mocks: ^0.9.1
   flutter_local_notifications: ^12.0.4
+  another_flushbar: ^1.12.29
 
 dev_dependencies:
   integration_test:

@@ -76,6 +76,7 @@ class _TodoModalState extends State<TodoModal> {
     // Notif checkbox
     final notif = Row(children: [
       Icon(Icons.notifications_active),
+      Text(' : '),
       Checkbox(
         value: notification,
         onChanged: (bool? value) {
@@ -123,6 +124,7 @@ class _TodoModalState extends State<TodoModal> {
       case 'Add':
         {
           return Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               deadline,
               TextField(
@@ -151,7 +153,7 @@ class _TodoModalState extends State<TodoModal> {
                 children: [
                   status,
                   SizedBox(
-                    width: 10,
+                    width: 20,
                   ),
                   notif
                 ],
@@ -162,6 +164,7 @@ class _TodoModalState extends State<TodoModal> {
       // Edit and add will have input field in them
       default:
         return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text('Last edit: ${widget.todo!.edit}'),
             deadline,

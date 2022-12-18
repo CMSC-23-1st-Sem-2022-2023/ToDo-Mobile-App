@@ -17,11 +17,8 @@ class NotificationApi {
 
   final _localNotificationService = FlutterLocalNotificationsPlugin();
 
-  //final BehaviorSubject<String?> onNotificationClick = BehaviorSubject();
-
   // Initialize notification settings
   Future<void> intialize() async {
-    //tz.initializeTimeZones();
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -72,46 +69,8 @@ class NotificationApi {
     await _localNotificationService.show(id, title, body, details);
   }
 
-  /* Future<void> showScheduledNotification(
-      {required int id,
-      required String title,
-      required String body,
-      required int seconds}) async {
-    final details = await _notificationDetails();
-    await _localNotificationService.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.from(
-        DateTime.now().add(Duration(seconds: seconds)),
-        tz.local,
-      ),
-      details,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-    );
-  }
-
-  Future<void> showNotificationWithPayload(
-      {required int id,
-      required String title,
-      required String body,
-      required String payload}) async {
-    final details = await _notificationDetails();
-    await _localNotificationService.show(id, title, body, details,
-        payload: payload);
-  } */
-
   void onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) {
     print('id $id');
   }
-
-  /* void onSelectNotification(String? payload) {
-    print('payload $payload');
-    if (payload != null && payload.isNotEmpty) {
-      onNotificationClick.add(payload);
-    }
-  } */
 }

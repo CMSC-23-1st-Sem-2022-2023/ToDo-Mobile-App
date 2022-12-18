@@ -48,7 +48,7 @@ class FirebaseUserAPI {
       if (TodoPage.users[i].email == AuthProvider.userObj!.email) {
         TodoPage.user = TodoPage.users[i];
         //print("here");
-        //print(TodoPage.user!.name);
+        print(TodoPage.user!.name);
       }
     }
 

@@ -10,6 +10,9 @@
                 6. View friend's profile
 */
 
+import 'package:another_flushbar/flushbar.dart';
+import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:week7_networking_discussion/models/user_model.dart';
@@ -52,35 +55,40 @@ class UserModal extends StatelessWidget {
       case 'Delete':
         {
           // For deleting a friend
-          return Column(children: [
+          return Column(mainAxisSize: MainAxisSize.min, children: [
             const Padding(
                 padding: EdgeInsets.all(30),
-                child: Text(
+                child: Center(
+                    child: Text(
                   "Are you sure you want to delete this friend?",
-                )),
+                ))),
             ElevatedButton(
-                onPressed: () {
-                  for (int i = 0; i < TodoPage.todos.length; i++) {
-                    if (otherUser.todos.contains(TodoPage.todos[i].id)) {
-                      TodoPage.todos.remove(TodoPage.todos[i]);
-                    }
+              onPressed: () {
+                for (int i = 0; i < TodoPage.todos.length; i++) {
+                  if (otherUser.todos.contains(TodoPage.todos[i].id)) {
+                    TodoPage.todos.remove(TodoPage.todos[i]);
                   }
+                }
 
-                  TodoPage.user!.friends.remove(otherUser.id);
-                  otherUser.friends.remove(TodoPage.user!.id);
+                TodoPage.user!.friends.remove(otherUser.id);
+                otherUser.friends.remove(TodoPage.user!.id);
 
-                  FriendsPage.friends.remove(otherUser);
+                FriendsPage.friends.remove(otherUser);
 
-                  context
-                      .read<UserListProvider>()
-                      .deleteFriend(user.friends, otherUser.friends);
+                context
+                    .read<UserListProvider>()
+                    .deleteFriend(user.friends, otherUser.friends);
 
-                  FriendsPage.refresher!();
-                  TodoPage.func!();
-                  // Remove dialog after delete
-                  Navigator.of(context).pop();
-                },
-                child: Text("Delete")),
+                FriendsPage.refresher!();
+                TodoPage.func!();
+                // Remove dialog after delete
+                Navigator.of(context).pop();
+              },
+              child: Text("Delete"),
+            ),
+            SizedBox(
+              height: 20,
+            ),
           ]);
         }
       case 'request':
@@ -93,6 +101,7 @@ class UserModal extends StatelessWidget {
             itemCount: length,
             itemBuilder: ((context, index) {
               User other = friendrequests[index];
+              print(length);
 
               return ListTile(
                 title: Text(other.name),
@@ -161,20 +170,45 @@ class UserModal extends StatelessWidget {
         }
       // Search
       default:
-        return Column(children: [
-          TextField(
-            controller: _formFieldController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              hintText: 'type username',
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          const SizedBox(
+            height: 20,
+          ),
+          const Center(
+              child: Text(
+            'Search',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
             ),
+          )),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+              width: 280,
+              child: TextField(
+                controller: _formFieldController,
+                decoration: const InputDecoration(
+                    labelText: 'Enter name',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                    ),
+                    border: OutlineInputBorder()),
+              )),
+          SizedBox(
+            height: 20,
           ),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 showSearch(_formFieldController.text, context);
               },
-              child: Text("Search"))
+              child: Text("Search")),
+          SizedBox(
+            height: 20,
+          ),
         ]);
     }
   }
@@ -229,25 +263,33 @@ class UserModal extends StatelessWidget {
 
                       // If user is already a friend
                       if (user.friends.contains(userToBeAdded.id)) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('This user is already your friend.')));
+                        Flushbar(
+                          //backgroundColor: Colors.white,
+                          message: 'This user is already your friend.',
+                          duration: Duration(seconds: 3),
+                        ).show(context);
 
                         return;
                       } else if (user.sentFriendRequests
                           .contains(userToBeAdded.id)) {
                         // If you already send a friend request to the user
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'You already send a friend request to this user.')));
+                        Flushbar(
+                          //backgroundColor: Colors.white,
+                          message:
+                              'You already send a friend request to this user.',
+                          duration: Duration(seconds: 3),
+                        ).show(context);
 
                         return;
                       } else if (user.receivedFriendRequests
                           .contains(userToBeAdded.id)) {
                         // If user is already in the friend request
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'This user is already in your friend request.')));
+                        Flushbar(
+                          //backgroundColor: Colors.white,
+                          message:
+                              'This user is already in your friend request.',
+                          duration: Duration(seconds: 3),
+                        ).show(context);
                         return;
                       } else {
                         // Else send a friend request
@@ -265,8 +307,12 @@ class UserModal extends StatelessWidget {
                             user.sentFriendRequests,
                             userToBeAdded.receivedFriendRequests);
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Friend request sent')));
+                        Flushbar(
+                          //backgroundColor: Colors.white,
+                          message: 'Friend request sent!',
+                          duration: Duration(seconds: 3),
+                        ).show(context);
+
                         return;
                       }
                     },
