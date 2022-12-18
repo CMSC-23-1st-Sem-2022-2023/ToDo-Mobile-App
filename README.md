@@ -55,9 +55,6 @@ User tapped sign up button and was directed to sign up page\
 User inputted valid email and password in login page and was logged in.\
 ![Login](/images/Login.png)
 
-User inputted a first name, last name, and valid email and password.\
-![SignupSuccess](/images/SignupSuccess.png)
-
 User tapped todo in app drawer\
 ![Todo](/images/Todo.png)
 
