@@ -12,19 +12,6 @@ A shared todo flutter app that uses firebase with the following features:
 ### Section: C1L
 
 
-## Milestone 1
-![Signup](/images/milestone1/SignupPage.png)
-![SignupError](/images/milestone1/SignupErrorPage.png)
-![SignupSuccess](/images/milestone1/SignupPage.png)
-![Login](/images/milestone1/loginPage.png)
-![LoginErrorPage](/images/milestone1/loginErrorPage.png)
-![LoginSuccess](/images/milestone1/LoginSuccess.png)
-
-## Milestone 2
-![Appdrawer](/images/milestone2/milestone2.png)
-![Profile](/images/milestone2/milestone2friends.png)
-![Friends](/images/milestone2/milestone2profile.png)
-
 ## Milestone 3
 ![Friends](/images/milestone3/Friends.png)
 ![addTodo](/images/milestone3/addTodo.png)
